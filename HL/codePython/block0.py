@@ -312,11 +312,11 @@ def find_block0():
 
                     if IV2[0] == lowlevel.trunc(IV1[0] + (1 << 31)) \
                             and IV2[1] == lowlevel.trunc(IV1[1] + (1 << 31) + (1 << 25)) \
-                            and IV2[2] is lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
-                                                         IV2[3] is lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
+                            and IV2[2] == lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
+                                                         IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
                         return
 
-                    if IV2[0] is not lowlevel.trunc(IV1[0] + (1 << 31)):
+                    if IV2[0] != lowlevel.trunc(IV1[0] + (1 << 31)):
                         print("!")
 
 
