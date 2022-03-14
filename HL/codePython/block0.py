@@ -1,18 +1,19 @@
 import lowlevel
 import md5
 
-
-def check(int):
-    print(int)
-    if int >= 2**32:
-        print("TOO BIG!")
+def myprint(pr, counter):
+    if counter > 1:
+        print(pr)
 
 
-def find_block0():
+def find_block0(IV):
     block = 16 * [0]
-    # IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
-    IV = [4009666844, 4185421068, 320656731, 1175793337]
     Qoff = 3
+
+    print("TEST")
+
+    mycounter = 0
+    stupidcounter = 0
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -21,19 +22,19 @@ def find_block0():
     Q[3] = IV[1]
 
     q4mask = []
-    q4size = 16
+    q4size = (1<<4)
     for k in range(q4size):
         new = ((k << 2) ^ (k << 26)) & 0x38000004
         q4mask.append(new)
 
     q9q10mask = []
-    q9q10size = 8
+    q9q10size = (1<<3)
     for k in range(q9q10size):
         new = ((k << 13) ^ (k << 4)) & 0x2060
         q9q10mask.append(new)
 
     q9mask = []
-    q9size = 65536
+    q9size = (1<<16)
     for k in range(q9size):
         new = ((k << 1) ^ (k << 2) ^ (k << 5) ^ (k << 7) ^ (k << 8) ^ (k << 10)
                ^ (k << 11) ^ (k << 13)) & 0x0eb94f16
@@ -45,8 +46,6 @@ def find_block0():
         Q[Qoff + 4] = (lowlevel.xrng64() & 0x44000033) | 0x000002c0 | (Q[Qoff + 3] & 0x0287bc00)
         Q[Qoff + 5] = 0x41ffffc8 | (Q[Qoff + 4] & 0x04000033)
         Q[Qoff + 6] = 0xb84b82d6
-        print(0xb84b82d6)
-        print(Q[Qoff + 6])
         Q[Qoff + 7] = (lowlevel.xrng64() & 0x68000084) | 0x02401b43
         Q[Qoff + 8] = (lowlevel.xrng64() & 0x2b8f6e04) | 0x005090d3 | (~Q[Qoff + 7] & 0x40000000)
         Q[Qoff + 9] = 0x20040068 | (Q[Qoff + 8] & 0x00020000) | (~Q[Qoff + 8] & 0x40000000)
@@ -102,9 +101,9 @@ def find_block0():
             block[1] = lowlevel.sub(q17, q16)
             block[1] = md5.RR(block[1], 5)
             block[1] = lowlevel.sub(block[1], tt17)
-            q2 = block[1] + tt1
+            q2 = lowlevel.trunc(block[1] + tt1)
             q2 = md5.RL(q2, 12)
-            q2 += Q[Qoff + 1]
+            q2 = lowlevel.trunc(q2 + Q[Qoff + 1])
             block[5] = lowlevel.sub(tt5, q2)
 
             Q[Qoff + 2] = q2
@@ -128,7 +127,7 @@ def find_block0():
         # while keeping all conditions on q1-q20 intact
         # this changes m3, m4, m5 and m7
         counter2 = 0
-        while counter2 < lowlevel.trunc(1 << 4):
+        while counter2 < (1 << 4):
             Q[Qoff + 4] = q4 ^ q4mask[counter2]
             counter2 += 1
             block = md5.MD5_REVERSE_STEP(5, 0x4787c62a, 12, block, Q, Qoff)
@@ -149,7 +148,7 @@ def find_block0():
             tt9 = lowlevel.trunc(Q[Qoff + 6] + 0x8b44f7af)
             tt10 = lowlevel.trunc(Q[Qoff + 7] + 0xffff5bb1)
             tt8 = lowlevel.trunc(md5.FF(Q[Qoff + 8], Q[Qoff + 7], Q[Qoff + 6]) + Q[Qoff + 5] + 0x698098d8)
-            tt12 = lowlevel.trunc(md5.RR(lowlevel.sub(Q[Qoff + 13], Q[Qoff + 12]), 7) + 0x6b901122)
+            tt12 = lowlevel.sub(md5.RR(lowlevel.sub(Q[Qoff + 13], Q[Qoff + 12]), 7), 0x6b901122)
             tt13 = lowlevel.sub(
                 lowlevel.sub(
                     md5.RR(lowlevel.sub(Q[Qoff + 14], Q[Qoff + 13]), 12),
@@ -214,7 +213,8 @@ def find_block0():
 
                     c = lowlevel.trunc(c + md5.HH(d, a, b) + block[11] + 0x6d9d6122)
                     if 0 != (c & (1 << 15)): continue
-                    c = lowlevel.trunc((lowlevel.trunc(c << 16) | c >> 16) + d)
+
+                    c = lowlevel.trunc(((c << 16) | lowlevel.trunc(c >> 16)) + d)
 
                     b = md5.MD5_STEP(md5.HH, b, c, d, a, block[14], 0xfde5380c, 23)
                     a = md5.MD5_STEP(md5.HH, a, b, c, d, block[1], 0xa4beea44, 4)
@@ -229,12 +229,13 @@ def find_block0():
                     d = md5.MD5_STEP(md5.HH, d, a, b, c, block[12], 0xe6db99e5, 11)
                     c = md5.MD5_STEP(md5.HH, c, d, a, b, block[15], 0x1fa27cf8, 16)
                     b = md5.MD5_STEP(md5.HH, b, c, d, a, block[2], 0xc4ac5665, 23)
+
                     if 0 != ((b ^ d) & 0x80000000): continue
 
                     a = md5.MD5_STEP(md5.II, a, b, c, d, block[0], 0xf4292244, 6)
                     if 0 != (a ^ c) >> 31: continue
                     d = md5.MD5_STEP(md5.II, d, a, b, c, block[7], 0x432aff97, 10)
-                    if 0 == (b ^ d) >> 3: continue
+                    if 0 == (b ^ d) >> 31: continue
                     c = md5.MD5_STEP(md5.II, c, d, a, b, block[14], 0xab9423a7, 15)
                     if 0 != (a ^ c) >> 31: continue
                     b = md5.MD5_STEP(md5.II, b, c, d, a, block[5], 0xfc93a039, 21)
@@ -266,14 +267,9 @@ def find_block0():
                     IHV1 = lowlevel.trunc(b + IV[1])
                     IHV2 = lowlevel.trunc(c + IV[2])
                     IHV3 = lowlevel.trunc(d + IV[3])
-                    print("3")
-                    # check(b)
-                    # check(c)
-                    # check(d)
-                    # check(IV[1])
-                    # check(IV[2])
-                    # check(IV[3])
-                    # print("\n")
+
+                    print("stupidcounter: "+ str(stupidcounter))
+                    stupidcounter += 1
 
                     wang = True
                     if 0x02000000 != ((IHV2 ^ IHV1) & 0x86000000): wang = False
@@ -310,15 +306,18 @@ def find_block0():
                     IV1 = md5.md5_compress(IV1, block)
                     IV2 = md5.md5_compress(IV2, block2)
 
+                    print(IV1)
+                    print(IV2)
+
                     if IV2[0] == lowlevel.trunc(IV1[0] + (1 << 31)) \
                             and IV2[1] == lowlevel.trunc(IV1[1] + (1 << 31) + (1 << 25)) \
                             and IV2[2] == lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
                                                          IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
-                        return
+                        return block
 
                     if IV2[0] != lowlevel.trunc(IV1[0] + (1 << 31)):
                         print("!")
 
+                    mycounter += 1
 
-
-find_block0()
+# find_block0()

@@ -1,5 +1,4 @@
 import lowlevel
-import generate
 
 
 def MD5_STEP(f, a, b, c, d, m, ac, rc):

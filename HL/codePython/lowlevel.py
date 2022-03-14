@@ -1,7 +1,8 @@
 import random, datetime
 
-seed32_1 = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
-seed32_2 = 0x12345678;
+# seed32_1 = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+seed32_1 = 1647198749
+seed32_2 = 0x12345678
 
 def trunc(val, numbits=32):
     return val & (2 ** numbits - 1)
@@ -26,3 +27,4 @@ def sub(a, b):
     return diff % 2**32
 
 # 4294967296
+
