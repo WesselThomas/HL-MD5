@@ -10,8 +10,6 @@ def find_block0(IV):
     block = 16 * [0]
     Qoff = 3
 
-    print("TEST")
-
     mycounter = 0
     stupidcounter = 0
 
