@@ -1,5 +1,6 @@
 import lowlevel
 import md5
+import time
 
 def myprint(pr, counter):
     if counter > 1:
@@ -318,4 +319,8 @@ def find_block0(IV):
 
                     mycounter += 1
 
-# find_block0()
+start_time = time.time()
+IV = [4009666844, 4185421068, 320656731, 1175793337]
+find_block0(IV)
+print("TOTAL TIME:")
+print(time.time() - start_time)
