@@ -3,8 +3,7 @@ import md5
 
 
 def find_block1_stevens_10(IV):
-    print("TODO: S10")
-    print(IV)
+    print("S10")
     block = 16 * [0]
     Qoff = 3
 
@@ -26,8 +25,6 @@ def find_block1_stevens_10(IV):
         new = ((k << 1) ^ (k << 2) ^ (k << 3) ^ (k << 7) ^ (k << 12) ^ (k << 15) ^ (k << 18) ^ (
                 k << 20)) & 0x2471042a
         q9mask.append(new)
-
-    # print(q9q10mask)
 
     while True:
         aa = Q[Qoff] & 0x80000000
@@ -314,5 +311,5 @@ def find_block1_stevens_10(IV):
                 if IV2[0] != IV1[0]:
                     print("!")
 
-IV = [1569400239, 774297298, 1649500096, 436401821]
-find_block1_stevens_10(IV)
+# IV = [1569400239, 774297298, 1649500096, 436401821]
+# find_block1_stevens_10(IV)

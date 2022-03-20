@@ -267,7 +267,8 @@ def find_block0(IV):
                     IHV2 = lowlevel.trunc(c + IV[2])
                     IHV3 = lowlevel.trunc(d + IV[3])
 
-                    print("stupidcounter: "+ str(stupidcounter))
+                    # print(f"stupidcounter: {stupidcounter}")
+                    print(f"{stupidcounter = }")
                     stupidcounter += 1
 
                     wang = True

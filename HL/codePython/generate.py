@@ -11,7 +11,7 @@ def findCollision():
     msg1block0 = block0.find_block0(IV)
 
     IHV = IV
-    IHV = md5.md5_compress(IHV, b0)
+    IHV = md5.md5_compress(IHV, msg1block0)
 
     msg1block1 = block1.find_block1(IHV)
 
