@@ -3,6 +3,7 @@ import md5
 
 
 def find_block1_stevens_00(IV):
+    print("S00")
     block = 16 * [0]
     Qoff = 3
 
