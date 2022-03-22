@@ -2,7 +2,6 @@ import block0
 import block1
 import md5
 import lowlevel
-import struct
 
 fileName = "prefix.txt"
 
