@@ -2,6 +2,7 @@ import block0
 import block1
 import md5
 import lowlevel
+import struct
 
 fileName = "prefix.txt"
 
@@ -38,32 +39,21 @@ def findCollision():
     return msg1block0, msg1block1, msg2block0, msg2block1
 
 
-m1b0, m1b1, m2b0, m2b1 = findCollision()
-with open('prefix.txt', 'r') as f1, open('prefix_msg1.txt', 'a', encoding="utf-8") as f2, open('prefix_msg2.txt', 'a', encoding="utf-8") as f3:
-    for line in f1:
-        f2.write(line)
-        f3.write(line)
+def write_to_file(array, f):
+    for num in array:
+        b = num.to_bytes(4, 'little')
+        f.write(b)
 
-    for k in range(16):
-        for c in range(4):
-            # enc = str(chr(((m1b0[k] >> (c * 8)) & 0xFF)))
-            temp = ((m1b0[k] >> (c * 8)) & 0xFF)
-            print(temp)
-            num = chr(temp)
-            print(num)
-            enc = str(num)
-            f2.write(enc)
-    for k in range(16):
-        for c in range(4):
-            enc = str(chr(((m1b1[k] >> (c * 8)) & 0xFF)))
-            f2.write(enc)
-    for k in range(16):
-        for c in range(4):
-            enc = str(chr(((m2b0[k] >> (c * 8)) & 0xFF)))
-            f3.write(enc)
-    for k in range(16):
-        for c in range(4):
-            enc = str(chr(((m2b1[k] >> (c * 8)) & 0xFF)))
-            f3.write(enc)
+
+m1b0, m1b1, m2b0, m2b1 = findCollision()
+with open('prefix.txt', 'rb') as f1, open('prefix_msg1.txt', 'wb') as f2, open('prefix_msg2.txt', 'wb') as f3:
+    # TODO: add padding after prefix and strip newline
+    # for line in f1:
+    #     f2.write(bytes(line))
+    #     f3.write(bytes(line))
+    write_to_file(m1b0, f2)
+    write_to_file(m1b1, f2)
+    write_to_file(m2b0, f3)
+    write_to_file(m2b1, f3)
 
 # MD5IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
