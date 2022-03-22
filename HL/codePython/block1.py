@@ -20,13 +20,13 @@ def find_block1(IV):
             b1 = b1s11.find_block1_stevens_11(IV2)
         elif (IV[1] & (1 << 6)) != 0 and (IV[1] & 1) == 0:
             print("S10")
-            b1s10.find_block1_stevens_10(IV2)
+            b1 = b1s10.find_block1_stevens_10(IV2)
         elif (IV[1] & (1 << 6)) == 0 and (IV[1] & 1) != 0:
             print("S01")
-            b1s01.find_block1_stevens_01(IV2)
+            b1 = b1s01.find_block1_stevens_01(IV2)
         else:
             print("S00")
-            b1s00.find_block1_stevens_00(IV2)
+            b1 = b1s00.find_block1_stevens_00(IV2)
 
         b1[4] = lowlevel.trunc(b1[4] + (1 << 31))
         b1[11] = lowlevel.trunc(b1[11] + (1 << 15))
@@ -37,5 +37,5 @@ def find_block1(IV):
 
     return b1
 
-IHV = [3716883887, 2888226514, 3763429312, 2550331037]
-find_block1(IHV)
+# IHV = [3716883887, 2888226514, 3763429312, 2550331037]
+# find_block1(IHV)

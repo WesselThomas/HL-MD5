@@ -3,7 +3,6 @@ import md5
 
 
 def find_block1_stevens_10(IV):
-    print("S10")
     block = 16 * [0]
     Qoff = 3
 
@@ -307,9 +306,12 @@ def find_block1_stevens_10(IV):
                 IV1 = md5.md5_compress(IV1, block)
                 IV2 = md5.md5_compress(IV2, block2)
                 if IV2[0] == IV1[0] and IV2[1] == IV1[1] and IV2[2] == IV1[2] and IV2[3] == IV1[3]:
+                    print(block)
                     return block
                 if IV2[0] != IV1[0]:
                     print("!")
 
 # IV = [1569400239, 774297298, 1649500096, 436401821]
 # find_block1_stevens_10(IV)
+
+# BLOCK 1: [2341741213, 1654785416, 1272051245, 1543617655, 2735747523, 3883016052, 1862321035, 3599261579, 880334291, 467469207, 986188088, 2835778531, 1421249962, 2805981121, 1288019170, 4214318262]

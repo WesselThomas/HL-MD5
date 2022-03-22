@@ -33,7 +33,7 @@ def find_block0(IV):
         q9q10mask.append(new)
 
     q9mask = []
-    q9size = (1<<16)
+    q9size = (1 << 16)
     for k in range(q9size):
         new = ((k << 1) ^ (k << 2) ^ (k << 5) ^ (k << 7) ^ (k << 8) ^ (k << 10)
                ^ (k << 11) ^ (k << 13)) & 0x0eb94f16
@@ -312,7 +312,8 @@ def find_block0(IV):
                     if IV2[0] == lowlevel.trunc(IV1[0] + (1 << 31)) \
                             and IV2[1] == lowlevel.trunc(IV1[1] + (1 << 31) + (1 << 25)) \
                             and IV2[2] == lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
-                                                         IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
+                            IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
+                        print(block)
                         return block
 
                     if IV2[0] != lowlevel.trunc(IV1[0] + (1 << 31)):
@@ -320,8 +321,10 @@ def find_block0(IV):
 
                     mycounter += 1
 
-start_time = time.time()
-IV = [4009666844, 4185421068, 320656731, 1175793337]
-find_block0(IV)
-print("TOTAL TIME:")
-print(time.time() - start_time)
+# start_time = time.time()
+# IV = [4009666844, 4185421068, 320656731, 1175793337]
+# find_block0(IV)
+# print("TOTAL TIME:")
+# print(time.time() - start_time)
+
+# BLOCK 0: [4283288562, 656939853, 2106128531, 573736039, 1971245164, 3224215086, 2054686251, 3634841136, 3421764953, 1238117710, 2478663659, 2011068342, 3314879358, 166074220, 1909976678, 3880091990]
