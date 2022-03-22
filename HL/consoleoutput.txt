@@ -1,0 +1,251 @@
+Writing msg1block0
+ITERATION
+block[0]: 4283288562
+block[0] >> 0*8 = 4283288562
+(block[0] >> 0*8) & 0xFF = 242
+ABOVE AS CHAR = �
+ITERATION
+block[0]: 4283288562
+block[0] >> 1*8 = 16731595
+(block[0] >> 1*8) & 0xFF = 203
+ABOVE AS CHAR = �
+ITERATION
+block[0]: 4283288562
+block[0] >> 2*8 = 65357
+(block[0] >> 2*8) & 0xFF = 77
+ABOVE AS CHAR = M
+ITERATION
+block[0]: 4283288562
+block[0] >> 3*8 = 255
+(block[0] >> 3*8) & 0xFF = 255
+ABOVE AS CHAR = �
+ITERATION
+block[1]: 656939853
+block[1] >> 0*8 = 656939853
+(block[1] >> 0*8) & 0xFF = 77
+ABOVE AS CHAR = M
+ITERATION
+block[1]: 656939853
+block[1] >> 1*8 = 2566171
+(block[1] >> 1*8) & 0xFF = 27
+ABOVE AS CHAR =
+TERATION
+block[1]: 656939853
+block[1] >> 2*8 = 10024
+(block[1] >> 2*8) & 0xFF = 40
+ABOVE AS CHAR = (
+ITERATION
+block[1]: 656939853
+block[1] >> 3*8 = 39
+(block[1] >> 3*8) & 0xFF = 39
+ABOVE AS CHAR = '
+ITERATION
+block[2]: 2106128531
+block[2] >> 0*8 = 2106128531
+(block[2] >> 0*8) & 0xFF = 147
+ABOVE AS CHAR = �
+ITERATION
+block[2]: 2106128531
+block[2] >> 1*8 = 8227064
+(block[2] >> 1*8) & 0xFF = 248
+ABOVE AS CHAR = �
+ITERATION
+block[2]: 2106128531
+block[2] >> 2*8 = 32136
+(block[2] >> 2*8) & 0xFF = 136
+ABOVE AS CHAR = �
+ITERATION
+block[2]: 2106128531
+block[2] >> 3*8 = 125
+(block[2] >> 3*8) & 0xFF = 125
+ABOVE AS CHAR = }
+ITERATION
+block[3]: 573736039
+block[3] >> 0*8 = 573736039
+(block[3] >> 0*8) & 0xFF = 103
+ABOVE AS CHAR = g
+ITERATION
+block[3]: 573736039
+block[3] >> 1*8 = 2241156
+(block[3] >> 1*8) & 0xFF = 132
+ABOVE AS CHAR = �
+ITERATION
+block[3]: 573736039
+block[3] >> 2*8 = 8754
+(block[3] >> 2*8) & 0xFF = 50
+ABOVE AS CHAR = 2
+ITERATION
+block[3]: 573736039
+block[3] >> 3*8 = 34
+(block[3] >> 3*8) & 0xFF = 34
+ABOVE AS CHAR = "
+ITERATION
+block[4]: 1971245164
+block[4] >> 0*8 = 1971245164
+(block[4] >> 0*8) & 0xFF = 108
+ABOVE AS CHAR = l
+ITERATION
+block[4]: 1971245164
+block[4] >> 1*8 = 7700176
+(block[4] >> 1*8) & 0xFF = 208
+ABOVE AS CHAR = �
+ITERATION
+block[4]: 1971245164
+block[4] >> 2*8 = 30078
+(block[4] >> 2*8) & 0xFF = 126
+ABOVE AS CHAR = ~
+ITERATION
+block[4]: 1971245164
+block[4] >> 3*8 = 117
+(block[4] >> 3*8) & 0xFF = 117
+ABOVE AS CHAR = u
+ITERATION
+block[5]: 3224215086
+block[5] >> 0*8 = 3224215086
+(block[5] >> 0*8) & 0xFF = 46
+ABOVE AS CHAR = .
+ITERATION
+block[5]: 3224215086
+block[5] >> 1*8 = 12594590
+(block[5] >> 1*8) & 0xFF = 158
+ABOVE AS CHAR = �
+ITERATION
+block[5]: 3224215086
+block[5] >> 2*8 = 49197
+(block[5] >> 2*8) & 0xFF = 45
+ABOVE AS CHAR = -
+ITERATION
+block[5]: 3224215086
+block[5] >> 3*8 = 192
+(block[5] >> 3*8) & 0xFF = 192
+ABOVE AS CHAR = �
+ITERATION
+block[6]: 2054686251
+block[6] >> 0*8 = 2054686251
+(block[6] >> 0*8) & 0xFF = 43
+ABOVE AS CHAR = +
+ITERATION
+block[6]: 2054686251
+block[6] >> 1*8 = 8026118
+(block[6] >> 1*8) & 0xFF = 6
+ABOVE AS CHAR =
+ITERATION
+block[6]: 2054686251
+block[6] >> 2*8 = 31352
+(block[6] >> 2*8) & 0xFF = 120
+ABOVE AS CHAR = x
+ITERATION
+block[6]: 2054686251
+block[6] >> 3*8 = 122
+(block[6] >> 3*8) & 0xFF = 122
+ABOVE AS CHAR = z
+ITERATION
+block[7]: 3634841136
+block[7] >> 0*8 = 3634841136
+(block[7] >> 0*8) & 0xFF = 48
+ABOVE AS CHAR = 0
+ITERATION
+block[7]: 3634841136
+block[7] >> 1*8 = 14198598
+(block[7] >> 1*8) & 0xFF = 70
+ABOVE AS CHAR = F
+ITERATION
+block[7]: 3634841136
+block[7] >> 2*8 = 55463
+(block[7] >> 2*8) & 0xFF = 167
+ABOVE AS CHAR = �
+ITERATION
+block[7]: 3634841136
+block[7] >> 3*8 = 216
+(block[7] >> 3*8) & 0xFF = 216
+ABOVE AS CHAR = �
+ITERATION
+block[8]: 3421764953
+block[8] >> 0*8 = 3421764953
+(block[8] >> 0*8) & 0xFF = 89
+ABOVE AS CHAR = Y
+ITERATION
+block[8]: 3421764953
+block[8] >> 1*8 = 13366269
+(block[8] >> 1*8) & 0xFF = 253
+ABOVE AS CHAR = �
+ITERATION
+block[8]: 3421764953
+block[8] >> 2*8 = 52211
+(block[8] >> 2*8) & 0xFF = 243
+ABOVE AS CHAR = �
+ITERATION
+block[8]: 3421764953
+block[8] >> 3*8 = 203
+(block[8] >> 3*8) & 0xFF = 203
+ABOVE AS CHAR = �
+ITERATION
+block[9]: 1238117710
+block[9] >> 0*8 = 1238117710
+(block[9] >> 0*8) & 0xFF = 78
+ABOVE AS CHAR = N
+ITERATION
+block[9]: 1238117710
+block[9] >> 1*8 = 4836397
+(block[9] >> 1*8) & 0xFF = 45
+ABOVE AS CHAR = -
+ITERATION
+block[9]: 1238117710
+block[9] >> 2*8 = 18892
+(block[9] >> 2*8) & 0xFF = 204
+ABOVE AS CHAR = �
+ITERATION
+block[9]: 1238117710
+block[9] >> 3*8 = 73
+(block[9] >> 3*8) & 0xFF = 73
+ABOVE AS CHAR = I
+ITERATION
+block[10]: 2478663659
+block[10] >> 0*8 = 2478663659
+(block[10] >> 0*8) & 0xFF = 235
+ABOVE AS CHAR = �
+ITERATION
+block[10]: 2478663659
+block[10] >> 1*8 = 9682279
+(block[10] >> 1*8) & 0xFF = 103
+ABOVE AS CHAR = g
+ITERATION
+block[10]: 2478663659
+block[10] >> 2*8 = 37821
+(block[10] >> 2*8) & 0xFF = 189
+ABOVE AS CHAR = �
+ITERATION
+block[10]: 2478663659
+block[10] >> 3*8 = 147
+(block[10] >> 3*8) & 0xFF = 147
+ABOVE AS CHAR = �
+ITERATION
+block[11]: 2011068342
+block[11] >> 0*8 = 2011068342
+(block[11] >> 0*8) & 0xFF = 182
+ABOVE AS CHAR = �
+ITERATION
+block[11]: 2011068342
+block[11] >> 1*8 = 7855735
+(block[11] >> 1*8) & 0xFF = 119
+ABOVE AS CHAR = w
+ITERATION
+block[11]: 2011068342
+block[11] >> 2*8 = 30686
+(block[11] >> 2*8) & 0xFF = 222
+ABOVE AS CHAR = �
+ITERATION
+block[11]: 2011068342
+block[11] >> 3*8 = 119
+(block[11] >> 3*8) & 0xFF = 119
+ABOVE AS CHAR = w
+ITERATION
+block[12]: 3314879358
+block[12] >> 0*8 = 3314879358
+(block[12] >> 0*8) & 0xFF = 126
+ABOVE AS CHAR = ~
+ITERATION
+block[12]: 3314879358
+block[12] >> 1*8 = 12948747
+(block[12] >> 1*8) & 0xFF = 11
+ABOVE AS CHAR =
