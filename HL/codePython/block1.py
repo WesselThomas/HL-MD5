@@ -35,6 +35,7 @@ def find_block1(IV):
         print("W")
         b1 = b1wang.find_block1_wang(IV)
 
+    print(b1)
     return b1
 
 # IHV = [3716883887, 2888226514, 3763429312, 2550331037]
