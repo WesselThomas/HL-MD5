@@ -5,6 +5,13 @@ import md5
 def find_block1_stevens_00(IV):
     block = 16 * [0]
     Qoff = 3
+    stupidcounter = 0
+    printcounter = 0
+
+    print(IV)
+    print(lowlevel.seed32_1)
+    print(lowlevel.seed32_2)
+    print()
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -58,13 +65,23 @@ def find_block1_stevens_00(IV):
         tt1 = lowlevel.trunc(Q[Qoff - 2] + 0xe8c7b756)
         q1a = 0x02020801 | (Q[Qoff + 0] & 0x80000000)
 
+        # if (stupidcounter < 1 and printcounter < 10):
+        #     printcounter += 1
+        #     print(tt17)
+        #     print(tt18)
+        #     print(tt19)
+        #     print(tt0)
+        #     print(tt1)
+        #     print(q1a)
+        #     print(block)
+        #     print()
+
         counter = 0
         while counter < (1 << 12):
             counter += 1
 
             q1 = q1a | (lowlevel.xrng64() & 0x7dfdf7be)
             m1 = lowlevel.sub(Q[Qoff + 2], q1)
-            m1 = md5.RR(m1, 12) - md5.FF(q1, Q[Qoff + 0], Q[Qoff - 1]) - tt1
             m1 = lowlevel.sub(
                 lowlevel.sub(md5.RR(m1, 12), md5.FF(q1, Q[Qoff + 0], Q[Qoff - 1])),
                 tt1)
@@ -72,6 +89,16 @@ def find_block1_stevens_00(IV):
             q16 = Q[Qoff + 16]
             q17 = lowlevel.trunc(tt17 + m1)
             q17 = lowlevel.trunc(md5.RL(q17, 5) + q16)
+            # print("check1")
+            # if (stupidcounter < 1 and printcounter < 3):
+            #     printcounter += 1
+            #     print(q1)
+            #     print(m1)
+            #     print(q16)
+            #     print(q17)
+            #     print(block)
+            #     print()
+
             if 0x80000000 != ((q17 ^ q16) & 0x80008008): continue
             if 0 != (q17 & 0x00020000): continue
 
@@ -92,6 +119,18 @@ def find_block1_stevens_00(IV):
             q20 = md5.RL(q20, 20)
             q20 = lowlevel.trunc(q20 + q19)
             if 0x00040000 != ((q20 ^ q19) & 0x80040000): continue
+
+            # if (stupidcounter < 1 and printcounter < 10):
+            #     printcounter += 1
+            #     print(q1)
+            #     print(m1)
+            #     print(q16)
+            #     print(q17)
+            #     print(q18)
+            #     print(q19)
+            #     print(q20)
+            #     print(block)
+            #     print()
 
             Q[Qoff + 1] = q1
             Q[Qoff + 17] = q17
@@ -200,37 +239,39 @@ def find_block1_stevens_00(IV):
 
                 a = md5.MD5_STEP(md5.II, a, b, c, d, block[0], 0xf4292244, 6)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, d, a, b, c, block[7], 0x432aff97, 10)
+                d = md5.MD5_STEP(md5.II, d, a, b, c, block[7], 0x432aff97, 10)
                 if 0 == ((b ^ d) >> 31): continue
-                a = md5.MD5_STEP(md5.II, c, d, a, b, block[14], 0xab9423a7, 15)
+                c = md5.MD5_STEP(md5.II, c, d, a, b, block[14], 0xab9423a7, 15)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, b, c, d, a, block[5], 0xfc93a039, 21)
+                b = md5.MD5_STEP(md5.II, b, c, d, a, block[5], 0xfc93a039, 21)
                 if 0 != ((b ^ d) >> 31): continue
                 a = md5.MD5_STEP(md5.II, a, b, c, d, block[12], 0x655b59c3, 6)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, d, a, b, c, block[3], 0x8f0ccc92, 10)
+                d = md5.MD5_STEP(md5.II, d, a, b, c, block[3], 0x8f0ccc92, 10)
                 if 0 != ((b ^ d) >> 31): continue
-                a = md5.MD5_STEP(md5.II, c, d, a, b, block[10], 0xffeff47d, 15)
+                c = md5.MD5_STEP(md5.II, c, d, a, b, block[10], 0xffeff47d, 15)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, b, c, d, a, block[1], 0x85845dd1, 21)
+                b = md5.MD5_STEP(md5.II, b, c, d, a, block[1], 0x85845dd1, 21)
                 if 0 != ((b ^ d) >> 31): continue
                 a = md5.MD5_STEP(md5.II, a, b, c, d, block[8], 0x6fa87e4f, 6)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, d, a, b, c, block[15], 0xfe2ce6e0, 10)
+                d = md5.MD5_STEP(md5.II, d, a, b, c, block[15], 0xfe2ce6e0, 10)
                 if 0 != ((b ^ d) >> 31): continue
-                a = md5.MD5_STEP(md5.II, c, d, a, b, block[6], 0xa3014314, 15)
+                c = md5.MD5_STEP(md5.II, c, d, a, b, block[6], 0xa3014314, 15)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, b, c, d, a, block[13], 0x4e0811a1, 21)
+                b = md5.MD5_STEP(md5.II, b, c, d, a, block[13], 0x4e0811a1, 21)
                 if 0 == ((b ^ d) >> 31): continue
                 a = md5.MD5_STEP(md5.II, a, b, c, d, block[4], 0xf7537e82, 6)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, d, a, b, c, block[11], 0xbd3af235, 10)
+                d = md5.MD5_STEP(md5.II, d, a, b, c, block[11], 0xbd3af235, 10)
                 if 0 != ((b ^ d) >> 31): continue
-                a = md5.MD5_STEP(md5.II, c, d, a, b, block[2], 0x2ad7d2bb, 15)
+                c = md5.MD5_STEP(md5.II, c, d, a, b, block[2], 0x2ad7d2bb, 15)
                 if 0 != ((a ^ c) >> 31): continue
-                a = md5.MD5_STEP(md5.II, b, c, d, a, block[9], 0xeb86d391, 21)
+                b = md5.MD5_STEP(md5.II, b, c, d, a, block[9], 0xeb86d391, 21)
 
                 print(".")
+                print(stupidcounter)
+                stupidcounter += 1
 
                 block2 = [0] * 16
                 IV1 = [0] * 4
