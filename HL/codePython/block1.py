@@ -13,7 +13,7 @@ def find_block1(IV):
         IV2 = [lowlevel.trunc(IV[0] + (1 << 31)), lowlevel.trunc(IV[1] + (1 << 31) + (1 << 25)),
                lowlevel.trunc(IV[2] + (1 << 31) + (1 << 25)), lowlevel.trunc(IV[3] + (1 << 31) + (1 << 25))]
 
-        b1 = 16 * [0]
+        b1 = [0] * 16
 
         if (IV[1] & (1 << 6)) != 0 and (IV[1] & 1) != 0:
             print("S11")
@@ -35,8 +35,10 @@ def find_block1(IV):
         print("W")
         b1 = b1wang.find_block1_wang(IV)
 
+    print("Found second block!")
     print(b1)
     return b1
 
+# HARDCODED FOR 10
 # IHV = [3716883887, 2888226514, 3763429312, 2550331037]
 # find_block1(IHV)

@@ -313,6 +313,7 @@ def find_block0(IV):
                             and IV2[1] == lowlevel.trunc(IV1[1] + (1 << 31) + (1 << 25)) \
                             and IV2[2] == lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
                             IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
+                        print("Found first block!")
                         print(block)
                         return block
 

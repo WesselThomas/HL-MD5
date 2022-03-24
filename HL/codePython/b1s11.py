@@ -251,6 +251,6 @@ def find_block1_stevens_11(IV):
                 IV1 = md5.md5_compress(IV1, block)
                 IV2 = md5.md5_compress(IV2, block2)
                 if IV2[0] == IV1[0] and IV2[1] == IV1[1] and IV2[2] == IV1[2] and IV2[3] == IV1[3]:
-                    return
+                    return block
                 if IV2[0] != IV1[0]:
                     print("!")
