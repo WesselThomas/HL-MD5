@@ -24,10 +24,17 @@ import random, datetime
 # seed32_1 = 1648152120
 # seed32_2 = 0x12345678
 
-# FOR TESTING BLOCK1 - PATH W
-seed32_1 = 3044920037
-seed32_2 = 3411837156
+# FOR TESTING BLOCK1 - PATH 00
+# seed32_1 = 3044920037
+# seed32_2 = 3411837156
 
+# FOR TESTING BLOCK0 - PATH 11
+# seed32_1 = 1648199592
+# seed32_2 = 0x12345678
+
+# FOR TESTING BLOCK1 - PATH 11
+seed32_1 = 3656520534
+seed32_2 = 200389396
 
 def trunc(val):
     return val & 0xFFFFFFFF
