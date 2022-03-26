@@ -1,15 +1,16 @@
 import lowlevel
 import md5
-import time
-# import threading
-import queue
-from multiprocessing import Process
 
 
-def find_block0(IV, q):
+def find_block0(IV, q, i):
     block = 16 * [0]
     Qoff = 3
-    stupidcounter = 0
+    dumbcounter = 0
+
+    print("Start a process!")
+
+    for k in range(2*i):
+        lowlevel.xrng64()
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -38,6 +39,9 @@ def find_block0(IV, q):
 
     while True:
         Q[Qoff + 1] = lowlevel.xrng64()
+        if dumbcounter == 0:
+            print(Q[Qoff + 1])
+        dumbcounter += 1
         Q[Qoff + 3] = (lowlevel.xrng64() & 0xfe87bc3f) | 0x017841c0
         Q[Qoff + 4] = (lowlevel.xrng64() & 0x44000033) | 0x000002c0 | (Q[Qoff + 3] & 0x0287bc00)
         Q[Qoff + 5] = 0x41ffffc8 | (Q[Qoff + 4] & 0x04000033)
@@ -264,10 +268,6 @@ def find_block0(IV, q):
                     IHV2 = lowlevel.trunc(c + IV[2])
                     IHV3 = lowlevel.trunc(d + IV[3])
 
-                    # print(f"stupidcounter: {stupidcounter}")
-                    print(f"{stupidcounter = }")
-                    stupidcounter += 1
-
                     wang = True
                     if 0x02000000 != ((IHV2 ^ IHV1) & 0x86000000): wang = False
                     if 0 != ((IHV1 ^ IHV3) & 0x82000000): wang = False
@@ -303,38 +303,12 @@ def find_block0(IV, q):
                     IV1 = md5.md5_compress(IV1, block)
                     IV2 = md5.md5_compress(IV2, block2)
 
-                    print(IV1)
-                    print(IV2)
-
                     if IV2[0] == lowlevel.trunc(IV1[0] + (1 << 31)) \
                             and IV2[1] == lowlevel.trunc(IV1[1] + (1 << 31) + (1 << 25)) \
                             and IV2[2] == lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
                             IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
-                        print("Found first block!")
-                        print(block)
                         q.put(block)
                         return block
 
                     if IV2[0] != lowlevel.trunc(IV1[0] + (1 << 31)):
                         print("!")
-
-
-
-start_time = time.time()
-IV = [4009666844, 4185421068, 320656731, 1175793337]
-
-q = queue.Queue()
-processes = [Process(target=find_block0, args=(IV, q)) for i in range(2)]
-for pr in processes:
-    pr.daemon = True
-    pr.start()
-# threads = [threading.Thread(target=find_block0, args=(IV, q)) for i in range(2)]
-# for th in threads:
-#     th.daemon = True
-#     th.start()
-
-result = q.get()
-print("TOTAL TIME:")
-print(time.time() - start_time)
-
-# BLOCK 0: [4283288562, 656939853, 2106128531, 573736039, 1971245164, 3224215086, 2054686251, 3634841136, 3421764953, 1238117710, 2478663659, 2011068342, 3314879358, 166074220, 1909976678, 3880091990]

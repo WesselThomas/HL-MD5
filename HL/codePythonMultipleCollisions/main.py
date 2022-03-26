@@ -3,20 +3,54 @@ import block1
 import md5
 import lowlevel
 import time
+import sys
+import multiprocessing
+import queue
 
 
-def findCollision(IV):
-    # IV = [4009666844, 4185421068, 320656731, 1175793337]
+def findallblocks(IV):
 
-    # FOR ACTUAL RUN
-    msg1block0 = block0.find_block0(IV)
-    IHV = IV
-    IHV = md5.md5_compress(IHV, msg1block0)
-    msg1block1 = block1.find_block1(IHV)
+    # # FOR ACTUAL RUN
+    # msg1block0 = block0.find_block0(IV, i)
+    # print("Found first block!")
+    # print(msg1block0)
+    # IV = md5.md5_compress(IV, msg1block0)
+    # msg1block1 = block1.find_block1(IV)
+    # print("Found second block!")
+    # print(msg1block0)
+
+    q = queue.Queue()
+    # processes = [multiprocessing.Process(target=block0.find_block0, args=(IV, q, i)) for i in range(5)]
+    # for pr in processes:
+    #     pr.daemon = True
+    #     pr.start()
+    #     time.sleep(5)
+    #
+    # msg1block0 = q.get()
+    # for pr in processes:
+    #     pr.terminate()
+
+    # IV = md5.md5_compress(IV, msg1block0)
+    msg1block0 = [4283288562, 656939853, 2106128531, 573736039, 1971245164, 3224215086, 2054686251, 3634841136,
+              3421764953, 1238117710, 2478663659, 2011068342, 3314879358, 166074220, 1909976678, 3880091990]
+    IV = [3716883887, 2888226514, 3763429312, 2550331037]
+
+    processes = [multiprocessing.Process(target=block1.find_block1, args=(IV, q, i)) for i in range(5)]
+    for pr in processes:
+        pr.daemon = True
+        pr.start()
+        time.sleep(5)
+
+    print("waiting for first second block")
+    msg1block1 = q.get()
+    print("found second block")
+    for pr in processes:
+        pr.terminate()
 
     # HARDCODED FOR 10
     # msg1block0 = [4283288562, 656939853, 2106128531, 573736039, 1971245164, 3224215086, 2054686251, 3634841136,
     #               3421764953, 1238117710, 2478663659, 2011068342, 3314879358, 166074220, 1909976678, 3880091990]
+    # IV = [4009666844, 4185421068, 320656731, 1175793337]
     # IHV = [3716883887, 2888226514, 3763429312, 2550331037]
     # msg1block1 = [2341741213, 1654785416, 1272051245, 1543617655, 588263875, 3883016052, 1862321035, 3599261579,
     # 880334291, 467469207, 986188088, 2835811299, 1421249962, 2805981121, 3435502818, 4214318262]
@@ -58,7 +92,7 @@ def findCollision(IV):
     msg2block1[11] = lowlevel.sub(msg2block1[11], (1 << 15))
     msg2block1[14] = lowlevel.trunc(msg2block1[14] + (1 << 31))
 
-    print("FINISHED!")
+    print("Found 2 messages!")
     return msg1block0, msg1block1, msg2block0, msg2block1
 
 
@@ -70,7 +104,7 @@ def write_to_file(array, f):
 
 def loadprefix(filename):
     prefixblock = [0] * 16
-    with open('prefix.txt', 'rb') as f1, open('prefix_msg1.txt', 'wb') as f2, open('prefix_msg2.txt', 'wb') as f3:
+    with open(filename, 'rb') as f1, open('prefix_msg1.txt', 'wb') as f2, open('prefix_msg2.txt', 'wb') as f3:
         for line in f1:
             line = bytes(filter(lambda x: x != 0XD, list(line)))
             for k in range(16):
@@ -85,22 +119,30 @@ def loadprefix(filename):
     return prefixblock
 
 
-def main():
-    fileName = "prefix.txt"
+def createcollision(i):
+    # fileName = "prefix.txt"
+    fileName = sys.argv[1]
     MD5IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
-
     prefixblock = loadprefix(fileName)
     IV = md5.md5_compress(MD5IV, prefixblock)
 
-    m1b0, m1b1, m2b0, m2b1 = findCollision(IV)
-    with open('prefix_msg1.txt', 'ab') as f2, open('prefix_msg2.txt', 'ab') as f3:
+    m1b0, m1b1, m2b0, m2b1 = findallblocks(IV)
+    with open(f"prefix_msg{i}_1.txt", 'ab') as f2, open(f"prefix_msg{i}_2.txt", 'ab') as f3:
         write_to_file(m1b0, f2)
         write_to_file(m1b1, f2)
         write_to_file(m2b0, f3)
         write_to_file(m2b1, f3)
+    print(f"Created collisions in prefix_msg{i}_1.txt and prefix_msg{i}_2.txt")
 
+def main():
+    # collisionamount = int(sys.argv[2])
 
-start_time = time.time()
+    tic = time.time()
+    # pool = multiprocessing.Pool(4)
+    # pool.map(createcollision, range(collisionamount))
+    # pool.close()
+    createcollision(1)
+    toc = time.time()
+    print('Done in {:.4f} seconds'.format(toc-tic))
+
 main()
-print("TOTAL TIME:")
-print(time.time() - start_time)

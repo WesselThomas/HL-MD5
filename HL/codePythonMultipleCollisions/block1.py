@@ -6,7 +6,10 @@ import b1s00
 import b1wang
 
 
-def find_block1(IV):
+def find_block1(IV, q, i):
+    for k in range(2*i):
+        lowlevel.xrng64()
+
     if ((IV[1] ^ IV[2]) & (1 << 31)) == 0 and ((IV[1] ^ IV[3]) & (1 << 31)) == 0 and (IV[3] & (1 << 25)) == 0 and (
             IV[2] & (1 << 25)) == 0 and (IV[1] & (1 << 25)) == 0 and ((IV[2] ^ IV[1]) & 1) == 0:
 
@@ -31,12 +34,14 @@ def find_block1(IV):
         b1[4] = lowlevel.trunc(b1[4] + (1 << 31))
         b1[11] = lowlevel.trunc(b1[11] + (1 << 15))
         b1[14] = lowlevel.trunc(b1[14] + (1 << 31))
+
     else:
         print("W")
         b1 = b1wang.find_block1_wang(IV)
 
     print("Found second block!")
     print(b1)
+    q.put(b1)
     return b1
 
 # HARDCODED FOR 10

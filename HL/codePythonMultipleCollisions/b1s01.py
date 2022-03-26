@@ -2,7 +2,7 @@ import lowlevel
 import md5
 
 
-def find_block1_stevens_10(IV):
+def find_block1_stevens_01(IV):
     block = 16 * [0]
     Qoff = 3
 
@@ -13,53 +13,35 @@ def find_block1_stevens_10(IV):
     Q[3] = IV[1]
 
     q9q10mask = []
-    q9q10size = (1 << 4)
+    q9q10size = (1 << 5)
     for k in range(q9q10size):
-        new = ((k << 2) ^ (k << 8) ^ (k << 11) ^ (k << 25)) & 0x08004204
+        new = ((k << 4) ^ (k << 11) ^ (k << 24) ^ (k << 27)) & 0x88002030
         q9q10mask.append(new)
 
     q9mask = []
-    q9size = (1 << 10)
+    q9size = (1 << 9)
     for k in range(q9size):
-        new = ((k << 1) ^ (k << 2) ^ (k << 3) ^ (k << 7) ^ (k << 12) ^ (k << 15) ^ (k << 18) ^ (
-                k << 20)) & 0x2471042a
+        new = ((k << 1) ^ (k << 7) ^ (k << 9) ^ (k << 12) ^ (k << 15) ^ (k << 19) ^ (k << 22)) & 0x44310d02
         q9mask.append(new)
 
     while True:
         aa = Q[Qoff] & 0x80000000
 
-        Q[Qoff + 2] = (lowlevel.xrng64() & 0x79b0c6ba) | 0x024c3841 | aa
-        Q[Qoff + 3] = (lowlevel.xrng64() & 0x19300210) | 0x2603096d | (Q[Qoff + 2] & 0x80000082)
-        Q[Qoff + 4] = (lowlevel.xrng64() & 0x10300000) | 0xe4cae30c | (Q[Qoff + 3] & 0x01000030)
-        Q[Qoff + 5] = (lowlevel.xrng64() & 0x10000000) | 0x63494061 | (Q[Qoff + 4] & 0x00300000)
-        Q[Qoff + 6] = 0x7deaff68
-        Q[Qoff + 7] = (lowlevel.xrng64() & 0x20444000) | 0x09091ee0
-        Q[Qoff + 8] = (lowlevel.xrng64() & 0x09040000) | 0xb2529f6d
-        Q[Qoff + 9] = (lowlevel.xrng64() & 0x00040000) | 0x10885184
-        Q[Qoff + 10] = (lowlevel.xrng64() & 0x00000080) | 0x428afb11 | (Q[Qoff + 9] & 0x00040000)
-        Q[Qoff + 11] = (lowlevel.xrng64() & 0x128a8110) | 0x6571266b | (Q[Qoff + 10] & 0x0000080)
-        Q[Qoff + 12] = (lowlevel.xrng64() & 0x3ef38d7f) | 0x00003080 | (~Q[Qoff + 11] & 0x00080000)
-        Q[Qoff + 13] = (lowlevel.xrng64() & 0x3efb1d77) | 0x0004c008
-        Q[Qoff + 14] = (lowlevel.xrng64() & 0x5fff5d77) | 0x8000a288
-        Q[Qoff + 15] = (lowlevel.xrng64() & 0x1efe7ff7) | 0xe0008000 | (~Q[Qoff + 14] & 0x00010000)
-        Q[Qoff + 16] = (lowlevel.xrng64() & 0x5ffdffff) | 0x20000000 | (~Q[Qoff + 15] & 0x00020000)
-
-        # print(Q[Qoff + 2])
-        # print(Q[Qoff + 3])
-        # print(Q[Qoff + 4])
-        # print(Q[Qoff + 5])
-        # print(Q[Qoff + 6])
-        # print(Q[Qoff + 7])
-        # print(Q[Qoff + 8])
-        # print(Q[Qoff + 9])
-        # print(Q[Qoff + 10])
-        # print(Q[Qoff + 11])
-        # print(Q[Qoff + 12])
-        # print(Q[Qoff + 13])
-        # print(Q[Qoff + 14])
-        # print(Q[Qoff + 15])
-        # print(Q[Qoff + 16])
-        # print()
+        Q[Qoff + 2] = (lowlevel.xrng64() & 0x4db0e03e) | 0x32460441 | aa
+        Q[Qoff + 3] = (lowlevel.xrng64() & 0x0c000008) | 0x123c3af1 | (Q[Qoff + 2] & 0x80800002)
+        Q[Qoff + 4] = 0xe398f812 ^ (Q[Qoff + 3] & 0x88000000)
+        Q[Qoff + 5] = (lowlevel.xrng64() & 0x82000000) | 0x4c66e99e
+        Q[Qoff + 6] = (lowlevel.xrng64() & 0x80000000) | 0x27180590
+        Q[Qoff + 7] = (lowlevel.xrng64() & 0x00010130) | 0x51ea9e47
+        Q[Qoff + 8] = (lowlevel.xrng64() & 0x40200800) | 0xb7c291e5
+        Q[Qoff + 9] = (lowlevel.xrng64() & 0x00044000) | 0x380002b4
+        Q[Qoff + 10] = 0xb282b208 | (Q[Qoff + 9] & 0x00044000)
+        Q[Qoff + 11] = (lowlevel.xrng64() & 0x12808008) | 0xc5712f47
+        Q[Qoff + 12] = (lowlevel.xrng64() & 0x1ef18d7f) | 0x000a3080
+        Q[Qoff + 13] = (lowlevel.xrng64() & 0x1efb1d77) | 0x4004c008
+        Q[Qoff + 14] = (lowlevel.xrng64() & 0x1fff5d77) | 0x6000a288
+        Q[Qoff + 15] = (lowlevel.xrng64() & 0x1efe7ff7) | 0xa0008000 | (~Q[Qoff + 14] & 0x00010000)
+        Q[Qoff + 16] = (lowlevel.xrng64() & 0x1ffdffff) | 0x20000000 | (~Q[Qoff + 15] & 0x00020000)
 
         md5.MD5_REVERSE_STEP(5, 0x4787c62a, 12, block, Q, Qoff)
         md5.MD5_REVERSE_STEP(6, 0xa8304613, 17, block, Q, Qoff)
@@ -68,8 +50,6 @@ def find_block1_stevens_10(IV):
         md5.MD5_REVERSE_STEP(14, 0xa679438e, 17, block, Q, Qoff)
         md5.MD5_REVERSE_STEP(15, 0x49b40821, 22, block, Q, Qoff)
 
-        # print(block[15])
-
         tt17 = lowlevel.trunc(md5.GG(Q[Qoff + 16], Q[Qoff + 15], Q[Qoff + 14]) + Q[Qoff + 13] + 0xf61e2562)
         tt18 = lowlevel.trunc(Q[Qoff + 14] + 0xc040b340 + block[6])
         tt19 = lowlevel.trunc(Q[Qoff + 15] + 0x265e5a51 + block[11])
@@ -77,44 +57,23 @@ def find_block1_stevens_10(IV):
         tt0 = lowlevel.trunc(md5.FF(Q[Qoff + 0], Q[Qoff - 1], Q[Qoff - 2]) + Q[Qoff - 3] + 0xd76aa478)
         tt1 = lowlevel.trunc(Q[Qoff - 2] + 0xe8c7b756)
 
-        q1a = 0x02000941 ^ (Q[Qoff + 0] & 0x80000000)
+        q1a = 0x02000021 ^ (Q[Qoff + 0] & 0x80000020)
 
         counter = 0
         while counter < (1 << 12):
             counter += 1
 
-            q1 = q1a | (lowlevel.xrng64() & 0x7dfdf6be)
+            q1 = q1a | (lowlevel.xrng64() & 0x7dfff39e)
             m1 = lowlevel.sub(Q[Qoff + 2], q1)
             m1 = lowlevel.sub(
-                    lowlevel.sub(
-                        md5.RR(m1, 12),
-                        md5.FF(q1, Q[Qoff + 0], Q[Qoff - 1])
-                    ),
-                    tt1
-            )
+                lowlevel.sub(md5.RR(m1, 12), md5.FF(q1, Q[Qoff + 0], Q[Qoff - 1])),
+                tt1)
 
             q16 = Q[Qoff + 16]
             q17 = lowlevel.trunc(tt17 + m1)
             q17 = lowlevel.trunc(md5.RL(q17, 5) + q16)
-
-            # print(q1a)
-            # print(q1)
-            # print()
-            # print(m1)
-            # print(q16)
-            # print(q17)
-            # return
-
             if 0x80000000 != ((q17 ^ q16) & 0x80008008): continue
             if 0 != (q17 & 0x00020000): continue
-
-            # print(q1a)
-            # print(q1)
-            # print()
-            # print(m1)
-            # print(q16)
-            # print(q17)
-            # return
 
             q18 = lowlevel.trunc(md5.GG(q17, q16, Q[Qoff + 15]) + tt18)
             q18 = md5.RL(q18, 9)
@@ -149,6 +108,7 @@ def find_block1_stevens_10(IV):
             q21 = md5.RL(q21, 5)
             q21 = lowlevel.trunc(q21 + Q[Qoff + 20])
             if 0 != ((q21 ^ Q[Qoff + 20]) & 0x80020000): continue
+
             Q[Qoff + 21] = q21
 
             counter = 0
@@ -170,10 +130,10 @@ def find_block1_stevens_10(IV):
         tt23 = lowlevel.trunc(Q[Qoff + 19] + 0xd8a1e681 + block[15])
         tt24 = lowlevel.trunc(Q[Qoff + 20] + 0xe7d3fbc8 + block[4])
 
-        for k10 in range(1 << 4):
-            q10 = q10b | (q9q10mask[k10] & 0x08000004)
+        for k10 in range(1 << 5):
+            q10 = q10b | (q9q10mask[k10] & 0x08000030)
             m10 = md5.RR(lowlevel.sub(Q[Qoff + 11], q10), 17)
-            q9 = q9b | (q9q10mask[k10] & 0x00004200)
+            q9 = q9b | (q9q10mask[k10] & 0x80002000)
 
             m10 = lowlevel.sub(m10, lowlevel.trunc(md5.FF(q10, q9, Q[Qoff + 8]) + tt10))
 
@@ -190,14 +150,14 @@ def find_block1_stevens_10(IV):
 
             bb = lowlevel.trunc(tt24 + md5.GG(cc, dd, aa))
             bb = lowlevel.trunc(md5.RL(bb, 20) + cc)
-            if 0 == (bb & 0x80000000): continue;
+            if 0 == (bb & 0x80000000): continue
 
             block[10] = m10
             Q[Qoff + 9] = q9
             Q[Qoff + 10] = q10
             md5.MD5_REVERSE_STEP(13, 0xfd987193, 12, block, Q, Qoff)
 
-            for k9 in range(1 << 10):
+            for k9 in range(1 << 9):
                 a = aa
                 b = bb
                 c = cc
@@ -219,7 +179,8 @@ def find_block1_stevens_10(IV):
                 d = md5.MD5_STEP(md5.HH, d, a, b, c, block[8], 0x8771f681, 11)
 
                 c = lowlevel.trunc(c + md5.HH(d, a, b) + block[11] + 0x6d9d6122)
-                if 0 != (c & (1 << 15)): continue
+                if 0 != (c & (1 << 15)):
+                    continue
                 c = lowlevel.trunc((lowlevel.trunc(c << 16) | c >> 16) + d)
 
                 b = md5.MD5_STEP(md5.HH, b, c, d, a, block[14], 0xfde5380c, 23)
@@ -292,12 +253,6 @@ def find_block1_stevens_10(IV):
                 IV1 = md5.md5_compress(IV1, block)
                 IV2 = md5.md5_compress(IV2, block2)
                 if IV2[0] == IV1[0] and IV2[1] == IV1[1] and IV2[2] == IV1[2] and IV2[3] == IV1[3]:
-                    print(block)
                     return block
                 if IV2[0] != IV1[0]:
                     print("!")
-
-# IV = [1569400239, 774297298, 1649500096, 436401821]
-# find_block1_stevens_10(IV)
-
-# BLOCK 1: [2341741213, 1654785416, 1272051245, 1543617655, 2735747523, 3883016052, 1862321035, 3599261579, 880334291, 467469207, 986188088, 2835778531, 1421249962, 2805981121, 1288019170, 4214318262]

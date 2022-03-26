@@ -5,10 +5,6 @@ import md5
 def find_block1_wang(IV):
     block = 16 * [0]
     Qoff = 3
-    stupidcounter = 0
-    printcounter = 0
-
-    print(IV)
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -67,24 +63,10 @@ def find_block1_wang(IV):
         tt18 = lowlevel.trunc(Q[Qoff + 14] + 0xc040b340 + block[6])
         tt19 = lowlevel.trunc(Q[Qoff + 15] + 0x265e5a51 + block[11])
 
-        # if stupidcounter < 1:
-        #     print("tt17 18 19")
-        #     print(tt17)
-        #     print(tt18)
-        #     print(tt19)
-        #     print()
-
         tt0 = lowlevel.trunc(md5.FF(Q[Qoff + 0], Q[Qoff - 1], Q[Qoff - 2]) + Q[Qoff - 3] + 0xd76aa478)
         tt1 = lowlevel.trunc(Q[Qoff - 2] + 0xe8c7b756)
 
         q1a = 0x04200040 | (Q[Qoff + 2] & 0xf01e1080)
-
-        # if stupidcounter < 1:
-        #     print("tt0 tt1 q1a")
-        #     print(tt0)
-        #     print(tt1)
-        #     print(q1a)
-        #     print()
 
         counter = 0
         while counter < (1 << 12):
@@ -117,18 +99,6 @@ def find_block1_wang(IV):
             q20 = md5.RL(q20, 20)
             q20 = lowlevel.trunc(q20 + q19)
             if 0x00040000 != ((q20 ^ q19) & 0x80040000): continue
-
-            # if stupidcounter < 1:
-            #     print("BLABLA")
-            #     print(q1)
-            #     print(m1)
-            #     print(q16)
-            #     print(q17)
-            #     print(q18)
-            #     print(q19)
-            #     print(m0)
-            #     print(q20)
-            #     print()
 
             Q[Qoff + 1] = q1
             Q[Qoff + 17] = q17
@@ -170,20 +140,6 @@ def find_block1_wang(IV):
             tt23 = lowlevel.trunc(Q[Qoff + 19] + 0xd8a1e681 + block[15])
             tt24 = lowlevel.trunc(Q[Qoff + 20] + 0xe7d3fbc8 + block[4])
 
-            # if stupidcounter < 1:
-            #     print("BLABLA")
-            #     print(q4b)
-            #     print(q9b)
-            #     print(q10b)
-            #     print(tt21)
-            #     print(q21)
-            #     print(tt10)
-            #     print(tt22)
-            #     print(tt23)
-            #     print(tt24)
-            #     print(block)
-            #     print()
-
             counter2 = 0
             while counter2 < (1 << 5):
                 q10 = q10b ^ q10mask[counter2]
@@ -213,18 +169,6 @@ def find_block1_wang(IV):
                 Q[Qoff + 10] = q10
                 md5.MD5_REVERSE_STEP(13, 0xfd987193, 12, block, Q, Qoff)
 
-                # if stupidcounter < 1:
-                #     print("BLABLA")
-                #     print(q10)
-                #     print(m10)
-                #     print(q9)
-                #     print(aa)
-                #     print(bb)
-                #     print(cc)
-                #     print(dd)
-                #     print(block)
-                #     print()
-
                 for k9 in range(1 << 10):
                     a = aa
                     b = bb
@@ -248,16 +192,6 @@ def find_block1_wang(IV):
                     d = md5.MD5_STEP(md5.HH, d, a, b, c, block[8], 0x8771f681, 11)
 
                     c = lowlevel.trunc(c + md5.HH(d, a, b) + block[11] + 0x6d9d6122)
-
-                    if stupidcounter < 1:
-                        print("printcounter " + str(printcounter))
-                        printcounter += 1
-                        print(a)
-                        print(b)
-                        print(c)
-                        print(d)
-                        print(block)
-                        print()
 
                     if 0 == (c & (1 << 15)):
                         continue
@@ -312,13 +246,6 @@ def find_block1_wang(IV):
                     b = md5.MD5_STEP(md5.II, b, c, d, a, block[9], 0xeb86d391, 21)
 
                     print(".")
-                    # if stupidcounter < 1:
-                    #     print(tt17)
-                    #     print(tt18)
-                    #     print(tt19)
-
-                    stupidcounter += 1
-                    print(stupidcounter)
 
                     block2 = [0] * 16
                     IV1 = [0] * 4
