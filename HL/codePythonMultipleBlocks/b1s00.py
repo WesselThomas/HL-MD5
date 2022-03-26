@@ -5,6 +5,13 @@ import md5
 def find_block1_stevens_00(IV):
     block = 16 * [0]
     Qoff = 3
+    stupidcounter = 0
+    printcounter = 0
+
+    print(IV)
+    print(lowlevel.seed32_1)
+    print(lowlevel.seed32_2)
+    print()
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -231,6 +238,8 @@ def find_block1_stevens_00(IV):
                 b = md5.MD5_STEP(md5.II, b, c, d, a, block[9], 0xeb86d391, 21)
 
                 print(".")
+                print(stupidcounter)
+                stupidcounter += 1
 
                 block2 = [0] * 16
                 IV1 = [0] * 4

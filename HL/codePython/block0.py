@@ -1,18 +1,12 @@
 import lowlevel
 import md5
 import time
-
-def myprint(pr, counter):
-    if counter > 1:
-        print(pr)
+import queue
 
 
 def find_block0(IV):
     block = 16 * [0]
     Qoff = 3
-
-    mycounter = 0
-    stupidcounter = 0
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -21,13 +15,13 @@ def find_block0(IV):
     Q[3] = IV[1]
 
     q4mask = []
-    q4size = (1<<4)
+    q4size = (1 << 4)
     for k in range(q4size):
         new = ((k << 2) ^ (k << 26)) & 0x38000004
         q4mask.append(new)
 
     q9q10mask = []
-    q9q10size = (1<<3)
+    q9q10size = (1 << 3)
     for k in range(q9q10size):
         new = ((k << 13) ^ (k << 4)) & 0x2060
         q9q10mask.append(new)
@@ -56,12 +50,12 @@ def find_block0(IV):
         Q[Qoff + 15] = (lowlevel.xrng64() & 0x5efe7ff7) | 0x80008000 | (~Q[Qoff + 14] & 0x00010000)
         Q[Qoff + 16] = (lowlevel.xrng64() & 0x1ffdffff) | 0xa0000000 | (~Q[Qoff + 15] & 0x40020000)
 
-        block = md5.MD5_REVERSE_STEP(0, 0xd76aa478, 7, block, Q, Qoff)
-        block = md5.MD5_REVERSE_STEP(6, 0xa8304613, 17, block, Q, Qoff)
-        block = md5.MD5_REVERSE_STEP(7, 0xfd469501, 22, block, Q, Qoff)
-        block = md5.MD5_REVERSE_STEP(11, 0x895cd7be, 22, block, Q, Qoff)
-        block = md5.MD5_REVERSE_STEP(14, 0xa679438e, 17, block, Q, Qoff)
-        block = md5.MD5_REVERSE_STEP(15, 0x49b40821, 22, block, Q, Qoff)
+        md5.MD5_REVERSE_STEP(0, 0xd76aa478, 7, block, Q, Qoff)
+        md5.MD5_REVERSE_STEP(6, 0xa8304613, 17, block, Q, Qoff)
+        md5.MD5_REVERSE_STEP(7, 0xfd469501, 22, block, Q, Qoff)
+        md5.MD5_REVERSE_STEP(11, 0x895cd7be, 22, block, Q, Qoff)
+        md5.MD5_REVERSE_STEP(14, 0xa679438e, 17, block, Q, Qoff)
+        md5.MD5_REVERSE_STEP(15, 0x49b40821, 22, block, Q, Qoff)
 
         tt1 = lowlevel.trunc(md5.FF(Q[Qoff + 1], Q[Qoff + 0], Q[Qoff - 1]) + Q[Qoff - 2] + 0xe8c7b756)
         tt17 = lowlevel.trunc(md5.GG(Q[Qoff + 16], Q[Qoff + 15], Q[Qoff + 14]) + Q[Qoff + 13] + 0xf61e2562)
@@ -111,7 +105,7 @@ def find_block0(IV):
             Q[Qoff + 19] = q19
             Q[Qoff + 20] = q20
 
-            block = md5.MD5_REVERSE_STEP(2, 0x242070db, 17, block, Q, Qoff)
+            md5.MD5_REVERSE_STEP(2, 0x242070db, 17, block, Q, Qoff)
 
             counter = 0
             break
@@ -129,16 +123,16 @@ def find_block0(IV):
         while counter2 < (1 << 4):
             Q[Qoff + 4] = q4 ^ q4mask[counter2]
             counter2 += 1
-            block = md5.MD5_REVERSE_STEP(5, 0x4787c62a, 12, block, Q, Qoff)
+            md5.MD5_REVERSE_STEP(5, 0x4787c62a, 12, block, Q, Qoff)
             q21 = lowlevel.trunc(tt21 + block[5])
             q21 = md5.RL(q21, 5)
             q21 = lowlevel.trunc(q21 + Q[Qoff + 20])
             if 0 != ((q21 ^ Q[Qoff + 20]) & 0x80020000): continue
 
             Q[Qoff + 21] = q21
-            block = md5.MD5_REVERSE_STEP(3, 0xc1bdceee, 22, block, Q, Qoff)
-            block = md5.MD5_REVERSE_STEP(4, 0xf57c0faf, 7, block, Q, Qoff)
-            block = md5.MD5_REVERSE_STEP(7, 0xfd469501, 22, block, Q, Qoff)
+            md5.MD5_REVERSE_STEP(3, 0xc1bdceee, 22, block, Q, Qoff)
+            md5.MD5_REVERSE_STEP(4, 0xf57c0faf, 7, block, Q, Qoff)
+            md5.MD5_REVERSE_STEP(7, 0xfd469501, 22, block, Q, Qoff)
 
             tt22 = lowlevel.trunc(md5.GG(Q[Qoff + 21], Q[Qoff + 20], Q[Qoff + 19]) + Q[Qoff + 18] + 0x02441453)
             tt23 = lowlevel.trunc(Q[Qoff + 19] + 0xd8a1e681 + block[15])
@@ -267,10 +261,6 @@ def find_block0(IV):
                     IHV2 = lowlevel.trunc(c + IV[2])
                     IHV3 = lowlevel.trunc(d + IV[3])
 
-                    # print(f"stupidcounter: {stupidcounter}")
-                    print(f"{stupidcounter = }")
-                    stupidcounter += 1
-
                     wang = True
                     if 0x02000000 != ((IHV2 ^ IHV1) & 0x86000000): wang = False
                     if 0 != ((IHV1 ^ IHV3) & 0x82000000): wang = False
@@ -306,26 +296,11 @@ def find_block0(IV):
                     IV1 = md5.md5_compress(IV1, block)
                     IV2 = md5.md5_compress(IV2, block2)
 
-                    print(IV1)
-                    print(IV2)
-
                     if IV2[0] == lowlevel.trunc(IV1[0] + (1 << 31)) \
                             and IV2[1] == lowlevel.trunc(IV1[1] + (1 << 31) + (1 << 25)) \
                             and IV2[2] == lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
                             IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
-                        print("Found first block!")
-                        print(block)
                         return block
 
                     if IV2[0] != lowlevel.trunc(IV1[0] + (1 << 31)):
                         print("!")
-
-                    mycounter += 1
-
-# start_time = time.time()
-# IV = [4009666844, 4185421068, 320656731, 1175793337]
-# find_block0(IV)
-# print("TOTAL TIME:")
-# print(time.time() - start_time)
-
-# BLOCK 0: [4283288562, 656939853, 2106128531, 573736039, 1971245164, 3224215086, 2054686251, 3634841136, 3421764953, 1238117710, 2478663659, 2011068342, 3314879358, 166074220, 1909976678, 3880091990]
