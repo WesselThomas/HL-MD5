@@ -5,6 +5,7 @@ import md5
 def find_block1_stevens_01(IV):
     block = 16 * [0]
     Qoff = 3
+    printcounter = 0
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -133,11 +134,12 @@ def find_block1_stevens_01(IV):
             m10 = md5.RR(lowlevel.trunc(Q[Qoff + 11] - q10), 17)
             q9 = q9b | (q9q10mask[k10] & 0x80002000)
 
-            m10 = lowlevel.trunc(m10 - md5.FF(q10, q9, Q[Qoff + 8]) + tt10)
+            m10 = lowlevel.trunc(m10 - (md5.FF(q10, q9, Q[Qoff + 8]) + tt10))
 
             aa = Q[Qoff + 21]
             dd = lowlevel.trunc(tt22 + m10)
             dd = lowlevel.trunc(md5.RL(dd, 9) + aa)
+
             if 0 != (dd & 0x80000000): continue
 
             bb = Q[Qoff + 20]
