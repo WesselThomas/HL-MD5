@@ -1,12 +1,12 @@
 import random, datetime
 
 # FOR GOOD RUNNING
-seed32_1 = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
-seed32_2 = 0x12345678
+# seed32_1 = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+# seed32_2 = 0x12345678
 
 # FOR TESTING BLOCK0 - PATH 10
-# seed32_1 = 1647198749
-# seed32_2 = 0x12345678
+seed32_1 = 1647198749
+seed32_2 = 0x12345678
 
 # FOR TESTING BLOCK1 - PATH 10
 # seed32_1 = 812771879
@@ -56,9 +56,3 @@ def xrng64():
     seed32_2 = (seed32_2 ^ (seed32_2 >> 10)) ^ (t ^ (t >> 13))
 
     return seed32_1
-
-
-def sub(a, b):
-    diff = a - b
-    return diff % 2 ** 32
-

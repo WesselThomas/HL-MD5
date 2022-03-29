@@ -8,15 +8,9 @@ def MD5_STEP(f, a, b, c, d, m, ac, rc):
 
 
 def MD5_REVERSE_STEP(t, AC, RC, block, Q, Qoff):
-    block[t] = lowlevel.sub(Q[Qoff + t + 1], Q[Qoff + t])
-    block[t] = lowlevel.sub(
-        lowlevel.sub(
-            lowlevel.sub(
-                RR(block[t], RC),
-                FF(Q[Qoff + t], Q[Qoff + t - 1], Q[Qoff + t - 2])
-            ),
-            Q[Qoff + t - 3]),
-        AC)
+    block[t] = lowlevel.trunc(Q[Qoff + t + 1] - Q[Qoff + t])
+    block[t] = lowlevel.trunc(RR(block[t], RC) - FF(Q[Qoff + t], Q[Qoff + t - 1], Q[Qoff + t - 2]) -
+            Q[Qoff + t - 3] - AC)
     return block
 
 

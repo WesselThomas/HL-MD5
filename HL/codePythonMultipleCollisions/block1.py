@@ -39,8 +39,6 @@ def find_block1(IV, q, i):
         print("W")
         b1 = b1wang.find_block1_wang(IV)
 
-    print("Found second block!")
-    print(b1)
     q.put(b1)
     return b1
 

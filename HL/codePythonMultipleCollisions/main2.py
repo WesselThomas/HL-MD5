@@ -5,7 +5,6 @@ import lowlevel
 import time
 import sys
 import multiprocessing
-import queue
 
 
 def findallblocks(IV):
@@ -19,32 +18,33 @@ def findallblocks(IV):
     # print("Found second block!")
     # print(msg1block0)
 
-    q = queue.Queue()
-    # processes = [multiprocessing.Process(target=block0.find_block0, args=(IV, q, i)) for i in range(5)]
-    # for pr in processes:
-    #     pr.daemon = True
-    #     pr.start()
-    #     time.sleep(5)
-    #
-    # msg1block0 = q.get()
-    # for pr in processes:
-    #     pr.terminate()
+    q = multiprocessing.Queue()
+    processes = [multiprocessing.Process(target=block0.find_block0, args=(IV, q, i)) for i in range(5)]
+    for pr in processes:
+        pr.daemon = True
+        pr.start()
+        time.sleep(1)
 
-    # IV = md5.md5_compress(IV, msg1block0)
-    msg1block0 = [4283288562, 656939853, 2106128531, 573736039, 1971245164, 3224215086, 2054686251, 3634841136,
-              3421764953, 1238117710, 2478663659, 2011068342, 3314879358, 166074220, 1909976678, 3880091990]
-    IV = [3716883887, 2888226514, 3763429312, 2550331037]
+    print("Looking for first block...")
+    msg1block0 = q.get()
+    print(f"FOUND: {msg1block0}")
+    for pr in processes:
+        print("Terminating other block0 process!")
+        pr.terminate()
+
+    IV = md5.md5_compress(IV, msg1block0)
 
     processes = [multiprocessing.Process(target=block1.find_block1, args=(IV, q, i)) for i in range(5)]
     for pr in processes:
         pr.daemon = True
         pr.start()
-        time.sleep(5)
+        time.sleep(1)
 
-    print("waiting for first second block")
+    print("Looking for second block...")
     msg1block1 = q.get()
-    print("found second block")
+    print(f"FOUND: {msg1block1}")
     for pr in processes:
+        print("Terminating other block1 process!")
         pr.terminate()
 
     # HARDCODED FOR 10
@@ -92,7 +92,7 @@ def findallblocks(IV):
     msg2block1[11] = lowlevel.sub(msg2block1[11], (1 << 15))
     msg2block1[14] = lowlevel.trunc(msg2block1[14] + (1 << 31))
 
-    print("Found 2 messages!")
+    print("FINISHED: Found 2 messages!")
     return msg1block0, msg1block1, msg2block0, msg2block1
 
 
@@ -119,30 +119,25 @@ def loadprefix(filename):
     return prefixblock
 
 
-def createcollision(i):
-    # fileName = "prefix.txt"
+def createcollision():
     fileName = sys.argv[1]
     MD5IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     prefixblock = loadprefix(fileName)
     IV = md5.md5_compress(MD5IV, prefixblock)
 
     m1b0, m1b1, m2b0, m2b1 = findallblocks(IV)
-    with open(f"prefix_msg{i}_1.txt", 'ab') as f2, open(f"prefix_msg{i}_2.txt", 'ab') as f3:
+    with open("prefix_msg1.txt", 'ab') as f2, open("prefix_msg2.txt", 'ab') as f3:
         write_to_file(m1b0, f2)
         write_to_file(m1b1, f2)
         write_to_file(m2b0, f3)
         write_to_file(m2b1, f3)
-    print(f"Created collisions in prefix_msg{i}_1.txt and prefix_msg{i}_2.txt")
+    print(f"Created collisions in prefix_msg1.txt and prefix_msg2.txt")
 
 def main():
-    # collisionamount = int(sys.argv[2])
-
     tic = time.time()
-    # pool = multiprocessing.Pool(4)
-    # pool.map(createcollision, range(collisionamount))
-    # pool.close()
-    createcollision(1)
+    createcollision()
     toc = time.time()
+    print(f"Functions called: {lowlevel.count}")
     print('Done in {:.4f} seconds'.format(toc-tic))
 
 main()

@@ -63,10 +63,8 @@ def find_block1_stevens_00(IV):
             counter += 1
 
             q1 = q1a | (lowlevel.xrng64() & 0x7dfdf7be)
-            m1 = lowlevel.sub(Q[Qoff + 2], q1)
-            m1 = lowlevel.sub(
-                lowlevel.sub(md5.RR(m1, 12), md5.FF(q1, Q[Qoff + 0], Q[Qoff - 1])),
-                tt1)
+            m1 = lowlevel.trunc(Q[Qoff + 2] - q1)
+            m1 = lowlevel.trunc(md5.RR(m1, 12) - md5.FF(q1, Q[Qoff + 0], Q[Qoff - 1]) - tt1)
 
             q16 = Q[Qoff + 16]
             q17 = lowlevel.trunc(tt17 + m1)
@@ -85,8 +83,8 @@ def find_block1_stevens_00(IV):
             q19 = lowlevel.trunc(q19 + q18)
             if 0x80000000 != (q19 & 0x80020000): continue
 
-            m0 = lowlevel.sub(q1, Q[Qoff + 0])
-            m0 = lowlevel.sub(md5.RR(m0, 7), tt0)
+            m0 = lowlevel.trunc(q1 - Q[Qoff + 0])
+            m0 = lowlevel.trunc(md5.RR(m0, 7) - tt0)
 
             q20 = lowlevel.trunc(md5.GG(q19, q18, q17) + q16 + 0xe9b6c7aa + m0)
             q20 = md5.RL(q20, 20)
@@ -131,10 +129,10 @@ def find_block1_stevens_00(IV):
 
         for k10 in range(1 << 3):
             q10 = q10b | (q9q10mask[k10] & 0x08000020)
-            m10 = md5.RR(lowlevel.sub(Q[Qoff + 11], q10), 17)
+            m10 = md5.RR(lowlevel.trunc(Q[Qoff + 11] - q10), 17)
             q9 = q9b | (q9q10mask[k10] & 0x00002000)
 
-            m10 = lowlevel.sub(m10, lowlevel.trunc(md5.FF(q10, q9, Q[Qoff + 8]) + tt10))
+            m10 = lowlevel.trunc(m10 - (md5.FF(q10, q9, Q[Qoff + 8]) + tt10))
 
             aa = Q[Qoff + 21]
             dd = lowlevel.trunc(tt22 + m10)
@@ -239,9 +237,9 @@ def find_block1_stevens_00(IV):
                     IV1[t] = IV[t]
                     IV2[t] = lowlevel.trunc(IV[t] + (1 << 31))
 
-                IV2[1] = lowlevel.sub(IV2[1], (1 << 25))
-                IV2[2] = lowlevel.sub(IV2[2], (1 << 25))
-                IV2[3] = lowlevel.sub(IV2[3], (1 << 25))
+                IV2[1] = lowlevel.trunc(IV2[1] - (1 << 25))
+                IV2[2] = lowlevel.trunc(IV2[2] - (1 << 25))
+                IV2[3] = lowlevel.trunc(IV2[3] - (1 << 25))
 
                 for t in range(16):
                     block2[t] = block[t]

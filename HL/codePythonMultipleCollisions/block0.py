@@ -5,9 +5,6 @@ import md5
 def find_block0(IV, q, i):
     block = 16 * [0]
     Qoff = 3
-    dumbcounter = 0
-
-    print("Start a process!")
 
     for k in range(2*i):
         lowlevel.xrng64()
@@ -39,9 +36,6 @@ def find_block0(IV, q, i):
 
     while True:
         Q[Qoff + 1] = lowlevel.xrng64()
-        if dumbcounter == 0:
-            print(Q[Qoff + 1])
-        dumbcounter += 1
         Q[Qoff + 3] = (lowlevel.xrng64() & 0xfe87bc3f) | 0x017841c0
         Q[Qoff + 4] = (lowlevel.xrng64() & 0x44000033) | 0x000002c0 | (Q[Qoff + 3] & 0x0287bc00)
         Q[Qoff + 5] = 0x41ffffc8 | (Q[Qoff + 4] & 0x04000033)

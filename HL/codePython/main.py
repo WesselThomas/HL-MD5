@@ -4,16 +4,19 @@ import md5
 import lowlevel
 import time
 import sys
+# import cProfile
 
 
 def findCollision(IV):
 
     # # FOR ACTUAL RUN
+    print("Looking for first block...")
     msg1block0 = block0.find_block0(IV)
     print("Found first block!")
     print(msg1block0)
     IHV = IV
     IHV = md5.md5_compress(IHV, msg1block0)
+    print("Looking for second block...")
     msg1block1 = block1.find_block1(IHV)
     print("Found second block!")
     print(msg1block0)
@@ -25,6 +28,7 @@ def findCollision(IV):
     # IHV = [3716883887, 2888226514, 3763429312, 2550331037]
     # msg1block1 = [2341741213, 1654785416, 1272051245, 1543617655, 588263875, 3883016052, 1862321035, 3599261579,
     # 880334291, 467469207, 986188088, 2835811299, 1421249962, 2805981121, 3435502818, 4214318262]
+
 
     # HARDCODED FOR 01
     # msg1block0 = [3730354344,2403304351,42393750,3099239220,111443590,2032623641,847030808,3439968813,3350329670,2518797181,459952071,4257157006,1306565351,2019898353,2348702353,2875642670]
@@ -60,7 +64,7 @@ def findCollision(IV):
     msg2block0[11] = lowlevel.trunc(msg2block0[11] + (1 << 15))
     msg2block0[14] = lowlevel.trunc(msg2block0[14] + (1 << 31))
     msg2block1[4] = lowlevel.trunc(msg2block1[4] + (1 << 31))
-    msg2block1[11] = lowlevel.sub(msg2block1[11], (1 << 15))
+    msg2block1[11] = lowlevel.trunc(msg2block1[11] - (1 << 15))
     msg2block1[14] = lowlevel.trunc(msg2block1[14] + (1 << 31))
 
     print("FINISHED!")
@@ -107,6 +111,7 @@ def main():
 
 
 start_time = time.time()
+# cProfile.run('main()')
 main()
 print("TOTAL TIME:")
 print(time.time() - start_time)
