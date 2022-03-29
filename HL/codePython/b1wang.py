@@ -6,8 +6,6 @@ def find_block1_wang(IV):
     block = 16 * [0]
     Qoff = 3
 
-    print(IV)
-
     Q = [0] * 68
     Q[0] = IV[0]
     Q[1] = IV[3]
@@ -75,7 +73,7 @@ def find_block1_wang(IV):
             counter += 1
 
             q1 = q1a | (lowlevel.xrng64() & 0x01c0e71f)
-            m1 = lowlevel.trunc(Q[Qoff + 2] + q1)
+            m1 = lowlevel.trunc(Q[Qoff + 2] - q1)
             m1 = lowlevel.trunc(md5.RR(m1, 12) - md5.FF(q1, Q[Qoff + 0], Q[Qoff - 1]) - tt1)
 
             q16 = Q[Qoff + 16]
