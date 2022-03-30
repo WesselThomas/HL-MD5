@@ -178,7 +178,7 @@ def find_block1_stevens_01(IV):
                 c = (c + md5.HH(d, a, b) + block[11] + 0x6d9d6122) & 0xFFFFFFFF
                 if 0 != (c & (1 << 15)):
                     continue
-                c = ((lowlevel.trunc(c << 16) | c >> 16) + d) & 0xFFFFFFFF
+                c = ((((c << 16) & 0xFFFFFFFF) | c >> 16) + d) & 0xFFFFFFFF
 
                 b = md5.MD5_STEP(md5.HH, b, c, d, a, block[14], 0xfde5380c, 23)
                 a = md5.MD5_STEP(md5.HH, a, b, c, d, block[1], 0xa4beea44, 4)
@@ -235,7 +235,7 @@ def find_block1_stevens_01(IV):
                 IV2 = [0] * 4
                 for t in range(4):
                     IV1[t] = IV[t]
-                    IV2[t] = lowlevel.trunc(IV[t] + (1 << 31))
+                    IV2[t] = (IV[t] + (1 << 31)) & 0xFFFFFFFF
 
                 IV2[1] = (IV2[1] - (1 << 25)) & 0xFFFFFFFF
                 IV2[2] = (IV2[2] - (1 << 25)) & 0xFFFFFFFF

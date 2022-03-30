@@ -195,7 +195,7 @@ def find_block1_wang(IV):
 
                     if 0 == (c & (1 << 15)):
                         continue
-                    c = ((lowlevel.trunc(c << 16) | c >> 16) + d) & 0xFFFFFFFF
+                    c = ((((c << 16) & 0xFFFFFFFF) | c >> 16) + d) & 0xFFFFFFFF
 
                     b = md5.MD5_STEP(md5.HH, b, c, d, a, block[14], 0xfde5380c, 23)
                     a = md5.MD5_STEP(md5.HH, a, b, c, d, block[1], 0xa4beea44, 4)

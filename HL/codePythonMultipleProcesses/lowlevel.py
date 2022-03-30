@@ -44,21 +44,17 @@ seed32_2 = 0x12345678
 # seed32_1 = 60943824
 # seed32_2 = 947762648
 
-def trunc(val):
-    return val & 0xFFFFFFFF
+# def trunc(val):
+#     return val & 0xFFFFFFFF
 
 
 def xrng64():
     global seed32_1, seed32_2
 
-    t = seed32_1 ^ trunc(seed32_1 << 10)
+    t = seed32_1 ^ ((seed32_1 << 10) & 0xFFFFFFFF)
     seed32_1 = seed32_2
     seed32_2 = (seed32_2 ^ (seed32_2 >> 10)) ^ (t ^ (t >> 13))
 
     return seed32_1
 
-
-def sub(a, b):
-    diff = a - b
-    return diff % 2 ** 32
 

@@ -1,8 +1,8 @@
 import random, datetime
 
 # FOR GOOD RUNNING
-# seed32_1 = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
-# seed32_2 = 0x12345678
+seed32_1 = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+seed32_2 = 0x12345678
 
 # FOR TESTING BLOCK0 - PATH 10
 # seed32_1 = 1647198749
@@ -41,17 +41,17 @@ import random, datetime
 # seed32_2 = 0x12345678
 
 # FOR TESTING BLOCK1 - PATH 01
-seed32_1 = 60943824
-seed32_2 = 947762648
+# seed32_1 = 60943824
+# seed32_2 = 947762648
 
-def trunc(val):
-    return val & 0xFFFFFFFF
+# def trunc(val):
+#     return val & 0xFFFFFFFF
 
 
 def xrng64():
     global seed32_1, seed32_2
 
-    t = seed32_1 ^ trunc(seed32_1 << 10)
+    t = seed32_1 ^ ((seed32_1 << 10) & 0xFFFFFFFF)
     seed32_1 = seed32_2
     seed32_2 = (seed32_2 ^ (seed32_2 >> 10)) ^ (t ^ (t >> 13))
 

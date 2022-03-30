@@ -1,13 +1,12 @@
 import lowlevel
 import md5
+import time
+import queue
 
 
-def find_block0(IV, q, i):
+def find_block0(IV):
     block = 16 * [0]
     Qoff = 3
-
-    for k in range(2*i):
-        lowlevel.xrng64()
 
     Q = [0] * 68
     Q[0] = IV[0]
@@ -63,11 +62,7 @@ def find_block0(IV, q, i):
         tt18 = lowlevel.trunc(Q[Qoff + 14] + 0xc040b340 + block[6])
         tt19 = lowlevel.trunc(Q[Qoff + 15] + 0x265e5a51 + block[11])
         tt20 = lowlevel.trunc(Q[Qoff + 16] + 0xe9b6c7aa + block[0])
-        tt5 = lowlevel.sub(
-            lowlevel.sub(
-                md5.RR(lowlevel.sub(Q[Qoff + 6], Q[Qoff + 5]), 12),
-                md5.FF(Q[Qoff + 5], Q[Qoff + 4], Q[Qoff + 3])),
-            0x4787c62a)
+        tt5 = lowlevel.trunc(md5.RR(lowlevel.trunc(Q[Qoff + 6] - Q[Qoff + 5]), 12) - md5.FF(Q[Qoff + 5], Q[Qoff + 4], Q[Qoff + 3]) - 0x4787c62a)
 
         # change q17 until conditions are met on q18, q19 and q20
         counter = 0
@@ -92,13 +87,13 @@ def find_block0(IV, q, i):
             q20 = lowlevel.trunc(q20 + q19)
             if 0x00040000 != ((q20 ^ q19) & 0x80040000): continue
 
-            block[1] = lowlevel.sub(q17, q16)
+            block[1] = lowlevel.trunc(q17 - q16)
             block[1] = md5.RR(block[1], 5)
-            block[1] = lowlevel.sub(block[1], tt17)
+            block[1] = lowlevel.trunc(block[1] - tt17)
             q2 = lowlevel.trunc(block[1] + tt1)
             q2 = md5.RL(q2, 12)
             q2 = lowlevel.trunc(q2 + Q[Qoff + 1])
-            block[5] = lowlevel.sub(tt5, q2)
+            block[5] = lowlevel.trunc(tt5 - q2)
 
             Q[Qoff + 2] = q2
             Q[Qoff + 17] = q17
@@ -142,12 +137,10 @@ def find_block0(IV, q, i):
             tt9 = lowlevel.trunc(Q[Qoff + 6] + 0x8b44f7af)
             tt10 = lowlevel.trunc(Q[Qoff + 7] + 0xffff5bb1)
             tt8 = lowlevel.trunc(md5.FF(Q[Qoff + 8], Q[Qoff + 7], Q[Qoff + 6]) + Q[Qoff + 5] + 0x698098d8)
-            tt12 = lowlevel.sub(md5.RR(lowlevel.sub(Q[Qoff + 13], Q[Qoff + 12]), 7), 0x6b901122)
-            tt13 = lowlevel.sub(
-                lowlevel.sub(
-                    md5.RR(lowlevel.sub(Q[Qoff + 14], Q[Qoff + 13]), 12),
-                    md5.FF(Q[Qoff + 13], Q[Qoff + 12], Q[Qoff + 11])),
-                0xfd987193)
+            tt12 = lowlevel.trunc(md5.RR(lowlevel.trunc(Q[Qoff + 13] - Q[Qoff + 12]), 7) - 0x6b901122)
+            tt13 = lowlevel.trunc(
+                    md5.RR(lowlevel.trunc(Q[Qoff + 14] - Q[Qoff + 13]), 12) -
+                    md5.FF(Q[Qoff + 13], Q[Qoff + 12], Q[Qoff + 11]) - 0xfd987193)
 
             # iterate over possible changes of q9 and q10
             # while keeping conditions on q1-q21 intact
@@ -158,8 +151,8 @@ def find_block0(IV, q, i):
                 q10 = Q[Qoff + 10] ^ (q9q10mask[counter3] & 0x60)
                 Q[Qoff + 9] = q9backup ^ (q9q10mask[counter3] & 0x2000)
                 counter3 += 1
-                m10 = md5.RR(lowlevel.sub(Q[Qoff + 11], q10), 17)
-                m10 = lowlevel.sub(m10, lowlevel.trunc(md5.FF(q10, Q[Qoff + 9], Q[Qoff + 8]) + tt10))
+                m10 = md5.RR(lowlevel.trunc(Q[Qoff + 11] - q10), 17)
+                m10 = lowlevel.trunc(m10 - (md5.FF(q10, Q[Qoff + 9], Q[Qoff + 8]) + tt10))
 
                 aa = Q[Qoff + 21]
                 dd = lowlevel.trunc(tt22 + m10)
@@ -175,20 +168,18 @@ def find_block0(IV, q, i):
                 if 0 == (bb & 0x80000000): continue
 
                 block[10] = m10
-                block[13] = lowlevel.sub(tt13, q10)
+                block[13] = lowlevel.trunc(tt13 - q10)
 
                 # iterate over possible changes of q9
                 # while keeping intact conditions on q1-q24
                 # this changes m8, m9 and m12 (but not m10!)
                 for counter4 in range(1 << 16):
                     q9 = Q[Qoff + 9] ^ q9mask[counter4]
-                    block[12] = lowlevel.sub(
-                        lowlevel.sub(tt12, md5.FF(Q[Qoff + 12], Q[Qoff + 11], q10)),
-                        q9)
-                    m8 = lowlevel.sub(q9, Q[Qoff + 8])
-                    block[8] = lowlevel.sub(md5.RR(m8, 7), tt8)
-                    m9 = lowlevel.sub(q10, q9)
-                    block[9] = lowlevel.sub(lowlevel.sub(md5.RR(m9, 12), md5.FF(q9, Q[Qoff + 8], Q[Qoff + 7])), tt9)
+                    block[12] = lowlevel.trunc(tt12 - md5.FF(Q[Qoff + 12], Q[Qoff + 11], q10) - q9)
+                    m8 = lowlevel.trunc(q9 - Q[Qoff + 8])
+                    block[8] = lowlevel.trunc(md5.RR(m8, 7) - tt8)
+                    m9 = lowlevel.trunc(q10 - q9)
+                    block[9] = lowlevel.trunc(md5.RR(m9, 12) - md5.FF(q9, Q[Qoff + 8], Q[Qoff + 7]) - tt9)
 
                     a = aa
                     b = bb
@@ -301,7 +292,6 @@ def find_block0(IV, q, i):
                             and IV2[1] == lowlevel.trunc(IV1[1] + (1 << 31) + (1 << 25)) \
                             and IV2[2] == lowlevel.trunc(IV1[2] + (1 << 31) + (1 << 25)) and \
                             IV2[3] == lowlevel.trunc(IV1[3] + (1 << 31) + (1 << 25)):
-                        q.put(block)
                         return block
 
                     if IV2[0] != lowlevel.trunc(IV1[0] + (1 << 31)):

@@ -2,22 +2,15 @@ import lowlevel
 
 
 def MD5_STEP(f, a, b, c, d, m, ac, rc):
-    a = lowlevel.trunc(a + f(b, c, d) + m + ac)
-    a = lowlevel.trunc((lowlevel.trunc(a << rc) | a >> (32-rc)) + b)
+    a = (a + f(b, c, d) + m + ac) & 0xFFFFFFFF
+    a = ((((a << rc) & 0xFFFFFFFF) | a >> (32-rc)) + b) & 0xFFFFFFFF
     return a
 
 
 def MD5_REVERSE_STEP(t, AC, RC, block, Q, Qoff):
-    block[t] = lowlevel.sub(Q[Qoff + t + 1], Q[Qoff + t])
-    block[t] = lowlevel.sub(
-        lowlevel.sub(
-            lowlevel.sub(
-                RR(block[t], RC),
-                FF(Q[Qoff + t], Q[Qoff + t - 1], Q[Qoff + t - 2])
-            ),
-            Q[Qoff + t - 3]),
-        AC)
-    return block
+    block[t] = (Q[Qoff + t + 1] - Q[Qoff + t]) & 0xFFFFFFFF
+    block[t] = (RR(block[t], RC) - FF(Q[Qoff + t], Q[Qoff + t - 1], Q[Qoff + t - 2]) -
+            Q[Qoff + t - 3] - AC) & 0xFFFFFFFF
 
 
 def FF(b, c, d):
@@ -37,11 +30,11 @@ def II(b, c, d):
 
 
 def RL(x, n):
-    return lowlevel.trunc(x << n) | (x >> (32 - n))
+    return ((x << n) & 0xFFFFFFFF) | (x >> (32 - n))
 
 
 def RR(x, n):
-    return (x >> n) | lowlevel.trunc(x << (32 - n))
+    return (x >> n) | ((x << (32 - n)) & 0xFFFFFFFF)
 
 
 def md5_compress(ihv, block):
@@ -115,9 +108,9 @@ def md5_compress(ihv, block):
     c = MD5_STEP(II, c, d, a, b, block[2], 0x2ad7d2bb, 15)
     b = MD5_STEP(II, b, c, d, a, block[9], 0xeb86d391, 21)
 
-    ihv[0] = lowlevel.trunc(ihv[0] + a)
-    ihv[1] = lowlevel.trunc(ihv[1] + b)
-    ihv[2] = lowlevel.trunc(ihv[2] + c)
-    ihv[3] = lowlevel.trunc(ihv[3] + d)
+    ihv[0] = (ihv[0] + a) & 0xFFFFFFFF
+    ihv[1] = (ihv[1] + b) & 0xFFFFFFFF
+    ihv[2] = (ihv[2] + c) & 0xFFFFFFFF
+    ihv[3] = (ihv[3] + d) & 0xFFFFFFFF
 
     return ihv
