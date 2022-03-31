@@ -41,7 +41,3 @@ def find_block1(IV, q, i):
 
     q.put(b1)
     return b1
-
-# HARDCODED FOR 10
-# IHV = [3716883887, 2888226514, 3763429312, 2550331037]
-# find_block1(IHV)

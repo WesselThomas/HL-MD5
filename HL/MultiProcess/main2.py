@@ -9,15 +9,6 @@ from os import path
 
 def findallblocks(IV):
 
-    # # FOR ACTUAL RUN
-    # msg1block0 = block0.find_block0(IV, i)
-    # print("Found first block!")
-    # print(msg1block0)
-    # IV = md5.md5_compress(IV, msg1block0)
-    # msg1block1 = block1.find_block1(IV)
-    # print("Found second block!")
-    # print(msg1block0)
-
     q = multiprocessing.Queue()
     processes = [multiprocessing.Process(target=block0.find_block0, args=(IV, q, i)) for i in range(5)]
     for pr in processes:
@@ -29,7 +20,6 @@ def findallblocks(IV):
     msg1block0 = q.get()
     print(f"FOUND: {msg1block0}")
     for pr in processes:
-        print("Terminating other block0 process!")
         pr.terminate()
 
     IV = md5.md5_compress(IV, msg1block0)
@@ -44,7 +34,6 @@ def findallblocks(IV):
     msg1block1 = q.get()
     print(f"FOUND: {msg1block1}")
     for pr in processes:
-        print("Terminating other block1 process!")
         pr.terminate()
 
     msg2block0 = [0] * 16

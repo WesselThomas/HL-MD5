@@ -6,8 +6,6 @@ def find_block0(IV, q, i):
     block = 16 * [0]
     Qoff = 3
 
-    print("Start a process!")
-
     for k in range(5*i):
         lowlevel.xrng64()
 

@@ -1,16 +1,13 @@
-import lowlevel
-
-
 def MD5_STEP(f, a, b, c, d, m, ac, rc):
     a = (a + f(b, c, d) + m + ac) & 0xFFFFFFFF
-    a = ((((a << rc) & 0xFFFFFFFF) | a >> (32-rc)) + b) & 0xFFFFFFFF
+    a = ((((a << rc) & 0xFFFFFFFF) | a >> (32 - rc)) + b) & 0xFFFFFFFF
     return a
 
 
 def MD5_REVERSE_STEP(t, AC, RC, block, Q, Qoff):
     block[t] = (Q[Qoff + t + 1] - Q[Qoff + t]) & 0xFFFFFFFF
     block[t] = (RR(block[t], RC) - FF(Q[Qoff + t], Q[Qoff + t - 1], Q[Qoff + t - 2]) -
-            Q[Qoff + t - 3] - AC) & 0xFFFFFFFF
+                Q[Qoff + t - 3] - AC) & 0xFFFFFFFF
 
 
 def FF(b, c, d):
