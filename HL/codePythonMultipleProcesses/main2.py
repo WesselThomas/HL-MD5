@@ -57,7 +57,7 @@ def findallblocks(IV):
     msg2block0[11] = (msg2block0[11] + (1 << 15)) & 0xFFFFFFFF
     msg2block0[14] = (msg2block0[14] + (1 << 31)) & 0xFFFFFFFF
     msg2block1[4] = (msg2block1[4] + (1 << 31)) & 0xFFFFFFFF
-    msg2block1[11] = (msg2block1[11], (1 << 15)) & 0xFFFFFFFF
+    msg2block1[11] = (msg2block1[11] - (1 << 15)) & 0xFFFFFFFF
     msg2block1[14] = (msg2block1[14] + (1 << 31)) & 0xFFFFFFFF
 
     print("FINISHED: Found 2 messages!")
@@ -87,25 +87,29 @@ def loadprefix(filename):
     return prefixblock
 
 
-def createcollision():
+def createcollision(i):
     fileName = sys.argv[1]
     MD5IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     prefixblock = loadprefix(fileName)
     IV = md5.md5_compress(MD5IV, prefixblock)
 
     m1b0, m1b1, m2b0, m2b1 = findallblocks(IV)
-    with open("prefix_msg1.txt", 'ab') as f2, open("prefix_msg2.txt", 'ab') as f3:
+    with open(f"prefix_msg{i}_1.txt", 'ab') as f2, open(f"prefix_msg{i}_2.txt", 'ab') as f3:
         write_to_file(m1b0, f2)
         write_to_file(m1b1, f2)
         write_to_file(m2b0, f3)
         write_to_file(m2b1, f3)
-    print(f"Created collisions in prefix_msg1.txt and prefix_msg2.txt")
+    print(f"Created collisions in prefix_msg{i}_1.txt and prefix_msg{i}_2.txt")
 
 def main():
-    tic = time.time()
-    createcollision()
-    toc = time.time()
-    print(f"Functions called: {lowlevel.count}")
-    print('Done in {:.4f} seconds'.format(toc-tic))
+    i = 7
+    start = time.time()
+    createcollision(i)
+    end = time.time()
+    print('This collision took {:.4f} seconds'.format(end-start))
+    with open("timelog.txt", 'a') as file:
+        file.write(f"Collision {i}: {end-start} seconds")
 
 main()
+
+# 2677 seconds

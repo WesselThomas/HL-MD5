@@ -1,4 +1,4 @@
-import random, datetime
+import datetime
 
 # FOR GOOD RUNNING
 seed32_1 = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))

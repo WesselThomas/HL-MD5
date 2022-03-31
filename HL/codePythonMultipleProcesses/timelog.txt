@@ -1,0 +1,7 @@
+Collision 0: 11241.991857290268 seconds
+Collision 1: 10584.006907701492 seconds
+Collision 2: 9585.508468389511 seconds
+Collision 3: 9622.0480427742 seconds
+Collision 4: 9688.864283561707 seconds
+Collision 5: 9669.056285619736 seconds
+Collision 6: 9518.396136760712 seconds
