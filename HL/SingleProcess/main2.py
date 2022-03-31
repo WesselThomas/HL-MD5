@@ -76,7 +76,7 @@ def write_to_file(array, f):
 
 def loadprefix(filename, i):
     prefixblock = [0] * 16
-    with open(filename, 'rb') as f1, open(f"prefix_msg{i}_1.txt", 'wb') as f2, open(f"prefix_msg{i}_2.txt", 'wb') as f3:
+    with open(filename, 'rb') as f1, open(f"prefix_msg1.txt", 'wb') as f2, open(f"prefix_msg2.txt", 'wb') as f3:
         for line in f1:
             line = bytes(filter(lambda x: x != 0XD, list(line)))
             for k in range(16):

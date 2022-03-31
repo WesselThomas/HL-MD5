@@ -59,9 +59,9 @@ def write_to_file(array, f):
         f.write(b)
 
 
-def loadprefix(filename, i):
+def loadprefix(filename):
     prefixblock = [0] * 16
-    with open(filename, 'rb') as f1, open(f"prefix_msg{i}_1.txt", 'wb') as f2, open(f"prefix_msg{i}_2.txt", 'wb') as f3:
+    with open(filename, 'rb') as f1, open(f"prefix_msg1.txt", 'wb') as f2, open(f"prefix_msg2.txt", 'wb') as f3:
         for line in f1:
             line = bytes(filter(lambda x: x != 0XD, list(line)))
             for k in range(16):
@@ -77,25 +77,18 @@ def loadprefix(filename, i):
 
 
 def createcollision():
-    i = 0
-    stop = False
-    while not stop:
-        if path.exists(f"prefix_msg{i}_1.txt") and path.exists(f"prefix_msg{i}_2.txt"):
-            i += 1
-            stop = True
-
     fileName = sys.argv[1]
     MD5IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
-    prefixblock = loadprefix(fileName, i)
+    prefixblock = loadprefix(fileName)
     IV = md5.md5_compress(MD5IV, prefixblock)
 
     m1b0, m1b1, m2b0, m2b1 = findallblocks(IV)
-    with open(f"prefix_msg{i}_1.txt", 'ab') as f2, open(f"prefix_msg{i}_2.txt", 'ab') as f3:
+    with open(f"prefix_msg1.txt", 'ab') as f2, open(f"prefix_msg2.txt", 'ab') as f3:
         write_to_file(m1b0, f2)
         write_to_file(m1b1, f2)
         write_to_file(m2b0, f3)
         write_to_file(m2b1, f3)
-    print(f"Created collisions in prefix_msg{i}_1.txt and prefix_msg{i}_2.txt")
+    print(f"Created collisions in prefix_msg1.txt and prefix_msg2.txt")
 
 def main():
     start = time.time()
@@ -107,4 +100,4 @@ def main():
 
 main()
 
-# 2677 + 11241 + 10584 + 9585 + 9622 + 9688 + 9669 + 9518 + 3902 + 776 + 179 + 2289 + 3283 + 6607 + 6
+# 2677 + 11241 + 10584 + 9585 + 9622 + 9688 + 9669 + 9518 + 3902 + 776 + 179 + 2289 + 3283 + 6607 + 6 + 7065 + 7567 + 3732
