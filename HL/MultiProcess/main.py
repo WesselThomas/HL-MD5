@@ -103,8 +103,8 @@ def main():
     end = time.time()
     print('This collision took {:.4f} seconds'.format(end-start))
     with open("timelog.txt", 'a') as file:
-        file.write(f"Collision {i}: {end-start} seconds\n")
+        file.write(f"Collision X: {end-start} seconds\n")
 
 main()
 
-# 2677 seconds
+# 2677 + 11241 + 10584 + 9585 + 9622 + 9688 + 9669 + 9518 + 3902 + 776 + 179 + 2289 + 3283 + 6607 + 6

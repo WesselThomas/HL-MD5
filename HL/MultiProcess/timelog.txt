@@ -10,3 +10,4 @@ Collision 9: 776.0942194461823 seconds
 Collision 10: 179.05274415016174 seconds
 Collision 11: 2289.024778842926 seconds
 Collision 12: 3283.4743916988373 seconds
+Collision 13: 6607.405986070633 seconds
