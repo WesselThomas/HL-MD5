@@ -5,3 +5,8 @@ Collision 3: 9622.0480427742 seconds
 Collision 4: 9688.864283561707 seconds
 Collision 5: 9669.056285619736 seconds
 Collision 6: 9518.396136760712 seconds
+Collision 7: 3902.7069261074066 seconds
+Collision 9: 776.0942194461823 seconds
+Collision 10: 179.05274415016174 seconds
+Collision 11: 2289.024778842926 seconds
+Collision 12: 3283.4743916988373 seconds

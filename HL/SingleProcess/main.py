@@ -4,7 +4,7 @@ import md5
 import lowlevel
 import time
 import sys
-# import cProfile
+from os import path
 
 
 def findCollision(IV):
@@ -74,9 +74,9 @@ def write_to_file(array, f):
         f.write(b)
 
 
-def loadprefix(filename):
+def loadprefix(filename, i):
     prefixblock = [0] * 16
-    with open(filename, 'rb') as f1, open('prefix_msg1.txt', 'wb') as f2, open('prefix_msg2.txt', 'wb') as f3:
+    with open(filename, 'rb') as f1, open(f"prefix_msg{i}_1.txt", 'wb') as f2, open(f"prefix_msg{i}_2.txt", 'wb') as f3:
         for line in f1:
             line = bytes(filter(lambda x: x != 0XD, list(line)))
             for k in range(16):
@@ -96,11 +96,18 @@ def main():
     fileName = sys.argv[1]
     MD5IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
 
-    prefixblock = loadprefix(fileName)
+    i = 0
+    stop = False
+    while not stop:
+        if path.exists(f"prefix_msg{i}_1.txt") and path.exists(f"prefix_msg{i}_2.txt"):
+            i += 1
+            stop = True
+
+    prefixblock = loadprefix(fileName, i)
     IV = md5.md5_compress(MD5IV, prefixblock)
 
     m1b0, m1b1, m2b0, m2b1 = findCollision(IV)
-    with open('prefix_msg1.txt', 'ab') as f2, open('prefix_msg2.txt', 'ab') as f3:
+    with open(f"prefix_msg{i}_1.txt", 'ab') as f2, open(f"prefix_msg{i}_2.txt", 'ab') as f3:
         write_to_file(m1b0, f2)
         write_to_file(m1b1, f2)
         write_to_file(m2b0, f3)
@@ -108,7 +115,6 @@ def main():
 
 
 start_time = time.time()
-# cProfile.run('main()')
 main()
 print("TOTAL TIME:")
 print(time.time() - start_time)

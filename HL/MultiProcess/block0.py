@@ -1,7 +1,5 @@
 import lowlevel
 import md5
-import time
-import queue
 
 
 def find_block0(IV, q, i):

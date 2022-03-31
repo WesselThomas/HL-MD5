@@ -1,10 +1,10 @@
 import block0
 import block1
 import md5
-import lowlevel
 import time
 import sys
 import multiprocessing
+from os import path
 
 
 def findallblocks(IV):
@@ -70,9 +70,9 @@ def write_to_file(array, f):
         f.write(b)
 
 
-def loadprefix(filename):
+def loadprefix(filename, i):
     prefixblock = [0] * 16
-    with open(filename, 'rb') as f1, open('prefix_msg1.txt', 'wb') as f2, open('prefix_msg2.txt', 'wb') as f3:
+    with open(filename, 'rb') as f1, open(f"prefix_msg{i}_1.txt", 'wb') as f2, open(f"prefix_msg{i}_2.txt", 'wb') as f3:
         for line in f1:
             line = bytes(filter(lambda x: x != 0XD, list(line)))
             for k in range(16):
@@ -87,10 +87,17 @@ def loadprefix(filename):
     return prefixblock
 
 
-def createcollision(i):
+def createcollision():
+    i = 0
+    stop = False
+    while not stop:
+        if path.exists(f"prefix_msg{i}_1.txt") and path.exists(f"prefix_msg{i}_2.txt"):
+            i += 1
+            stop = True
+
     fileName = sys.argv[1]
     MD5IV = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
-    prefixblock = loadprefix(fileName)
+    prefixblock = loadprefix(fileName, i)
     IV = md5.md5_compress(MD5IV, prefixblock)
 
     m1b0, m1b1, m2b0, m2b1 = findallblocks(IV)
@@ -102,13 +109,12 @@ def createcollision(i):
     print(f"Created collisions in prefix_msg{i}_1.txt and prefix_msg{i}_2.txt")
 
 def main():
-    i = 7
     start = time.time()
-    createcollision(i)
+    createcollision()
     end = time.time()
     print('This collision took {:.4f} seconds'.format(end-start))
     with open("timelog.txt", 'a') as file:
-        file.write(f"Collision {i}: {end-start} seconds")
+        file.write(f"Collision {i}: {end-start} seconds\n")
 
 main()
 
